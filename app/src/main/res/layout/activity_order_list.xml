@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.navinfo.liuba.OrderInputActivity">
+    tools:context="com.navinfo.liuba.MyOrderListActivity">
 
     <include
         android:id="@+id/layer_order_list_title"
@@ -43,7 +43,7 @@
         android:background="#fff" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/slidebar_viewPager"
+        android:id="@+id/order_type_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/layer_order_list_confirm"
