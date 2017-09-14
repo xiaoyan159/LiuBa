@@ -13,7 +13,6 @@
         android:layout_alignParentTop="true"></include>
 
     <LinearLayout
-        android:id="@+id/layer_order_confirm_confirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -28,6 +27,7 @@
             android:textColor="@color/colorFontPrimaryDark" />
 
         <RelativeLayout
+            android:id="@+id/layer_order_confirm_confirm"
             style="@style/bottomLayerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

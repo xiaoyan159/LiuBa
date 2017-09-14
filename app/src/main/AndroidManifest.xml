@@ -19,6 +19,9 @@
         </activity>
         <activity android:name="com.navinfo.liuba.BaseActivity"></activity>
         <activity android:name="com.navinfo.liuba.OrderConfirmActivity"></activity>
+        <activity android:name="com.navinfo.liuba.MyOrderListActivity"></activity>
+        <activity android:name="com.navinfo.liuba.PaymentSelect"></activity>
+        <activity android:name="com.navinfo.liuba.PaymentConfirm"></activity>
     </application>
 
 </manifest>

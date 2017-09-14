@@ -8,4 +8,5 @@
     <dimen name="default_font_size">15sp</dimen>
     <dimen name="actionbar_hight">25dp</dimen>
     <dimen name="space_width">8dp</dimen>
+    <dimen name="payment_success">50sp</dimen>
 </resources>

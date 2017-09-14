@@ -42,7 +42,7 @@
         android:layout_below="@id/layer_order_list_title"
         android:background="#fff" />
 
-    <android.support.v4.view.ViewPager
+    <com.shizhefei.view.viewpager.SViewPager
         android:id="@+id/order_type_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.navinfo.liuba.OrderInputActivity">
+
+    <View
+        android:id="@+id/divder_payment_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        android:layout_marginTop="@dimen/fab_margin"
+        ></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+        <TextView
+            android:paddingLeft="@dimen/fab_margin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorFontPrimaryDark"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:text="@string/pay_success_tips"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:id="@+id/layer_my_order_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                style="@style/bottomLayerStyle">
+                <TextView
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/order"
+                    style="@style/bottomTextBgStyle"/>
+            </RelativeLayout>
+            <Space
+                android:layout_width="1dp"
+                android:layout_height="wrap_content" />
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                style="@style/bottomLayerStyle">
+                <TextView
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/title_confirm"
+                    style="@style/bottomTextBgStyle"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="支付成功"
+        android:layout_below="@id/divder_payment_confirm"
+        android:paddingTop="@dimen/fab_margin"
+        android:textColor="@color/colorFontPrimaryDark"
+        android:gravity="center"
+        android:textSize="@dimen/payment_success"/>
+</RelativeLayout>
