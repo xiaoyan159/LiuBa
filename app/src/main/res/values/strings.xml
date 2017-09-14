@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">LiuBa</string>
+    <string name="title_activity_order_input">OrderInputActivity</string>
+    <string name="title_back">返回</string>
+    <string name="title_confirm">确定</string>
+    <string name="hint_reservation_date">点击选择预约日期</string>
+    <string name="hint_start_time">点击选择开始时间</string>
+    <string name="hint_liu_area">点击选择遛狗区域</string>
+    <string name="fee_tips">说明:服务时间内,每半小时收费30元</string>
 </resources>
