@@ -2,7 +2,6 @@ package com.navinfo.liuba;
 
 import android.app.Activity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.litesuits.common.assist.Check;
@@ -14,10 +13,10 @@ import com.litesuits.common.assist.Check;
 public class TopMenuHeader {
 
     // 顶部菜单左边按钮
-    public ImageView topMenuLeft;
+    public TextView topMenuLeft;
 
     // 顶部菜单右边按钮
-    public ImageView topMenuRight;
+    public TextView topMenuRight;
 
     // 顶部菜单文字
     public TextView topMenuTitle;
@@ -34,10 +33,10 @@ public class TopMenuHeader {
     private void initTopMenu(final Activity activity) {
         if (activity != null) {
             // 右边按钮
-            topMenuRight = (ImageView) activity.findViewById(R.id.img_titile_right);
+            topMenuRight = (TextView) activity.findViewById(R.id.tv_title_right);
 
             // 左边按钮
-            topMenuLeft = (ImageView) activity.findViewById(R.id.img_title_left);
+            topMenuLeft = (TextView) activity.findViewById(R.id.tv_title_left);
 
             // 顶部中间文字
             topMenuTitle = (TextView) activity.findViewById(R.id.tv_title_text);

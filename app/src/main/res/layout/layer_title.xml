@@ -18,7 +18,7 @@
         android:textSize="@dimen/title_font_size" />
 
     <TextView
-        android:id="@+id/img_titile_right"
+        android:id="@+id/tv_title_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_toLeftOf="@id/img_titile_right"
+        android:layout_toLeftOf="@id/tv_title_right"
         android:layout_toRightOf="@id/tv_title_left"
         android:gravity="center"
         android:text="@string/app_name"

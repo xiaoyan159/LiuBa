@@ -10,14 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".OrderInputActivity" >
+            android:name="com.navinfo.liuba.OrderInputActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BaseActivity"></activity>
+        <activity android:name="com.navinfo.liuba.BaseActivity"></activity>
+        <activity android:name="com.navinfo.liuba.OrderConfirmActivity"></activity>
     </application>
 
 </manifest>

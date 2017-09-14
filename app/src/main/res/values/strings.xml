@@ -7,4 +7,10 @@
     <string name="hint_start_time">点击选择开始时间</string>
     <string name="hint_liu_area">点击选择遛狗区域</string>
     <string name="fee_tips">说明:服务时间内,每半小时收费30元</string>
+
+    <string name="hint_user_name">在此输入用户姓名</string>
+    <string name="hint_user_phone">在此输入用户电话</string>
+    <string name="hint_user_address">在此输入用户地址</string>
+    <string name="hint_fee_total">合计</string>
+    <string name="edit_text">修改</string>
 </resources>

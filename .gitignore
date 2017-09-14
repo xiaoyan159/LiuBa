@@ -7,3 +7,10 @@
 /build
 /captures
 .externalNativeBuild
+/app/proguard-rules.pro
+/gradle.properties
+/build.gradle
+/settings.gradle
+/null
+/gradle/wrapper/gradle-wrapper.properties
+/app/build.gradle
