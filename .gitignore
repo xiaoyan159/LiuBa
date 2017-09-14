@@ -6,4 +6,9 @@
 .DS_Store
 /build
 /captures
-.externalNativeBuild
+/app/proguard-rules.pro
+/build.gradle
+/gradle.properties
+/settings.gradle
+/null
+/app/build.gradle
