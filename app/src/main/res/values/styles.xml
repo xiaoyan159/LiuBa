@@ -1,11 +1,62 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!--副标题的style-->
+    <style name="subTitleStyle" parent="android:Widget.Holo.TextView" >
+        <item name="android:textSize">@dimen/sub_title_font_size</item>
+        <item name="android:textColor">@color/colorFontPrimary</item>
+        <item name="android:background">@drawable/shape_subtitle_bg_4_corner</item>
+    </style>
+    <!--内容面板item的每一行style-->
+    <style name="itemLayerStyle" >
+        <item name="android:paddingLeft">@dimen/item_padding_horzontal</item>
+        <item name="android:paddingRight">@dimen/item_padding_horzontal</item>
+        <item name="android:paddingBottom">@dimen/item_padding_vertical</item>
+        <item name="android:paddingTop">@dimen/item_padding_vertical</item>
+    </style>
+    <!--内容面板item的文字style-->
+    <style name="itemTvStyle" parent="android:Widget.Holo.TextView" >
+        <item name="android:textSize">@dimen/default_font_size</item>
+        <item name="android:textColor">@color/colorFontPrimaryDark</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <!--内容面板item的中间间隔style-->
+    <style name="itemSpaceStyle" >
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:layout_width">@dimen/fab_margin</item>
+        <item name="android:layout_height">1dp</item>
+    </style>
+    <!--内容面板item的输入框style-->
+    <style name="itemEditTextStyle" >
+        <item name="android:background">@drawable/shape_edt_bg_4_corner</item>
+    </style>
+    <!--底部按钮的背景style-->
+    <style name="bottomLayerStyle" >
+        <item name="android:background">@drawable/selector_bottom_button_color</item>
+        <item name="android:paddingTop">@dimen/primary_padding</item>
+        <item name="android:paddingBottom">@dimen/primary_padding</item>
+    </style>
+    <!--内容面板item的输入框style-->
+    <style name="bottomTextBgStyle" parent="android:Widget.Holo.TextView">
+        <item name="android:background">@drawable/shape_ring_bottom_tv_bg</item>
+        <item name="android:textColor">@color/colorFontPrimary</item>
+        <item name="android:textSize">@dimen/title_font_size</item>
+        <item name="android:padding">@dimen/fab_margin</item>
+    </style>
 </resources>
