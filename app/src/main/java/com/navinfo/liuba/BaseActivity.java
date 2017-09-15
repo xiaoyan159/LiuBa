@@ -14,5 +14,6 @@ public class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        TopMenuHeader topMenuHeader=new TopMenuHeader(BaseActivity.this,getTitle().toString());
     }
 }
