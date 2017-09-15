@@ -15,14 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".BaseActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".OrderInputActivity" />
-        <activity android:name=".OrderConfirmActivity" />
-        <activity android:name=".MyOrderListActivity" />
-        <activity android:name=".PaymentSelect" />
-        <activity android:name=".PaymentConfirm" />
-        <activity android:name=".StartActivity"></activity>
+        <activity android:name="com.navinfo.liuba.BaseActivity"></activity>
+        <activity android:name="com.navinfo.liuba.MainActivity"></activity>
+        <activity android:name="com.navinfo.liuba.OrderInputActivity"></activity>
+        <activity android:name="com.navinfo.liuba.OrderConfirmActivity"></activity>
+        <activity android:name="com.navinfo.liuba.MyOrderListActivity"></activity>
+        <activity android:name="com.navinfo.liuba.PaymentSelect"></activity>
+        <activity android:name="com.navinfo.liuba.PaymentConfirm"></activity>
+        <activity android:name="com.navinfo.liuba.MyScretActivity"></activity>
     </application>
 
 </manifest>
