@@ -11,4 +11,6 @@
 /gradle.properties
 /settings.gradle
 /null
+.externalNativeBuild
+/gradle/wrapper/gradle-wrapper.properties
 /app/build.gradle
