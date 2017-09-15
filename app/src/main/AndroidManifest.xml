@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.navinfo.liuba.OrderInputActivity" >
+            android:name="com.navinfo.liuba.RegisterActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,6 +18,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.navinfo.liuba.BaseActivity"></activity>
+        <activity android:name="com.navinfo.liuba.MainActivity"></activity>
+        <activity android:name="com.navinfo.liuba.OrderInputActivity"></activity>
         <activity android:name="com.navinfo.liuba.OrderConfirmActivity"></activity>
         <activity android:name="com.navinfo.liuba.MyOrderListActivity"></activity>
         <activity android:name="com.navinfo.liuba.PaymentSelect"></activity>

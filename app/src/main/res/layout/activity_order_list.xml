@@ -14,13 +14,14 @@
         android:layout_alignParentTop="true"></include>
 
     <LinearLayout
-        android:id="@+id/layer_order_list_confirm"
+        android:id="@+id/layer_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/layer_order_list_confirm"
             style="@style/bottomLayerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +47,7 @@
         android:id="@+id/order_type_viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layer_order_list_confirm"
+        android:layout_above="@id/layer_bottom"
         android:layout_below="@id/order_type_indicator"
         android:background="#eee" />
 
