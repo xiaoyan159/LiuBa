@@ -51,6 +51,8 @@
         <item name="android:background">@drawable/selector_bottom_button_color</item>
         <item name="android:paddingTop">@dimen/primary_padding</item>
         <item name="android:paddingBottom">@dimen/primary_padding</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">@dimen/default_font_size</item>
     </style>
     <!--内容面板item的输入框style-->
     <style name="bottomTextBgStyle" parent="android:Widget.Holo.TextView">

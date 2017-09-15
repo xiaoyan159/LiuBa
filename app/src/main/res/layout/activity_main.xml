@@ -22,8 +22,58 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:clickable="true"
-            android:visibility="gone"
             android:src="@mipmap/icon_user" />
+
+        <LinearLayout
+            android:id="@+id/layer_user_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/user_center"
+            android:layout_marginLeft="@dimen/item_padding_horzontal"
+            android:layout_marginTop="3dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_main_userInfo"
+                style="@style/bottomLayerStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:padding="@dimen/fab_margin"
+                android:text="用户信息"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tv_main_orderInfo"
+                style="@style/bottomLayerStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:padding="@dimen/fab_margin"
+                android:text="订单信息"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tv_main_secret"
+                style="@style/bottomLayerStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:padding="@dimen/fab_margin"
+                android:text="密码锁"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tv_main_quite"
+                style="@style/bottomLayerStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:padding="@dimen/fab_margin"
+                android:text="退出"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/gps_location"
@@ -31,8 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:clickable="true"
-            android:visibility="gone"
-            android:src="@mipmap/map_center_icon" />
+            android:src="@mipmap/dog_avatar" />
 
         <LinearLayout
             android:layout_width="match_parent"

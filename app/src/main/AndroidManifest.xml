@@ -24,6 +24,7 @@
         <activity android:name="com.navinfo.liuba.MyOrderListActivity"></activity>
         <activity android:name="com.navinfo.liuba.PaymentSelect"></activity>
         <activity android:name="com.navinfo.liuba.PaymentConfirm"></activity>
+        <activity android:name="com.navinfo.liuba.MyScretActivity"></activity>
     </application>
 
 </manifest>
