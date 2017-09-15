@@ -3,6 +3,7 @@
     <string name="title_activity_order_input">OrderInputActivity</string>
     <string name="title_back">返回</string>
     <string name="title_confirm">确定</string>
+    <string name="order">订单</string>
     <string name="hint_reservation_date">点击选择预约日期</string>
     <string name="hint_start_time">点击选择开始时间</string>
     <string name="hint_liu_area">点击选择遛狗区域</string>
@@ -13,4 +14,7 @@
     <string name="hint_user_address">在此输入用户地址</string>
     <string name="hint_fee_total">合计</string>
     <string name="edit_text">修改</string>
+
+    <string name="pay_select">去支付>></string>
+    <string name="pay_success_tips">感谢您使用“溜吧”\n\n订单正在处理中，遛狗师会很快与您取得联系\n\n请保持电话畅通</string>
 </resources>

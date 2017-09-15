@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 用以显示tab文字的布局 -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_tab_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="@dimen/item_padding_vertical"
+    android:textSize="@dimen/default_font_size"></TextView>

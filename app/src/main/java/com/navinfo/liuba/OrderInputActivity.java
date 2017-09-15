@@ -16,6 +16,8 @@ public class OrderInputActivity extends BaseActivity {
     }
 
     private void initView(){
+        //初始化头部title
+
         layer_confirm=findViewById(R.id.layer_order_input_confirm);
         layer_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
