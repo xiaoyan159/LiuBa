@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.MapView;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mImgUserCenter;
@@ -20,6 +22,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private View layer_user_menu;//用户菜单的布局，点击左上角按钮显示
     private TextView tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
+
+    //百度地图组件
+    private MapView mMapView = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mLinearWalkAppoint = (LinearLayout) findViewById(R.id.linear_activity_walk_appoint);
         mLinearComplete = (LinearLayout) findViewById(R.id.linear_complete);
         mCompeleteWalkTheDog.setOnClickListener(this);
+
+        mMapView = (MapView) findViewById(R.id.bmapView);
     }
 
     @Override
@@ -86,5 +93,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        mMapView.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
+        mMapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
+        mMapView.onPause();
     }
 }
