@@ -6,11 +6,11 @@
 .DS_Store
 /build
 /captures
-.externalNativeBuild
 /app/proguard-rules.pro
-/gradle.properties
 /build.gradle
+/gradle.properties
 /settings.gradle
 /null
+.externalNativeBuild
 /gradle/wrapper/gradle-wrapper.properties
 /app/build.gradle

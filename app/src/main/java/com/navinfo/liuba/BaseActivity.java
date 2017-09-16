@@ -13,7 +13,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        TopMenuHeader topMenuHeader=new TopMenuHeader(BaseActivity.this,getTitle().toString());
+        TopMenuHeader topMenuHeader = new TopMenuHeader(BaseActivity.this, getTitle().toString());
     }
+
 }

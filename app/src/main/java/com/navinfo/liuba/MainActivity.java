@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -13,6 +14,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private View btnWalk;
     private View btnAppoint;
     private View mView;
+    private LinearLayout mCompeleteWalkTheDog;
+    private LinearLayout mLinearWalkAppoint;
+    private LinearLayout mLinearComplete;
 
     private View layer_user_menu;//用户菜单的布局，点击左上角按钮显示
     private TextView tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
@@ -42,6 +46,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         tv_orderInfo.setOnClickListener(this);
         tv_secret.setOnClickListener(this);
         tv_quite.setOnClickListener(this);
+        mCompeleteWalkTheDog = (LinearLayout) findViewById(R.id.complete_walk_the_dog);
+        mLinearWalkAppoint = (LinearLayout) findViewById(R.id.linear_activity_walk_appoint);
+        mLinearComplete = (LinearLayout) findViewById(R.id.linear_complete);
+        mCompeleteWalkTheDog.setOnClickListener(this);
     }
 
     @Override
@@ -59,7 +67,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 break;
             case R.id.walk_the_dog:
-
+                mLinearWalkAppoint.setVisibility(View.GONE);
+                mCompeleteWalkTheDog.setVisibility(View.VISIBLE);
                 break;
             case R.id.make_an_appointment:
                 Intent intent = new Intent(MainActivity.this, OrderInputActivity.class);
@@ -70,6 +79,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Intent secretIntent = new Intent(MainActivity.this, MyScretActivity.class);
                 startActivity(secretIntent);
                 break;
+
+            case R.id.complete_walk_the_dog:
+                mLinearWalkAppoint.setVisibility(View.VISIBLE);
+                mCompeleteWalkTheDog.setVisibility(View.GONE);
+                break;
+
         }
     }
 }
