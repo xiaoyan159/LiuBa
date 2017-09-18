@@ -325,7 +325,7 @@
                         android:textSize="@dimen/default_font_size" />
 
                     <EditText
-                        android:id="@+id/edt_register_petKind"
+                        android:id="@+id/edt_register_petHabit"
                         android:layout_width="260dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"

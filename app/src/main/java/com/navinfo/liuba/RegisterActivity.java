@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.navinfo.liuba.view.ProvinceAndCity;
@@ -24,19 +25,19 @@ public class RegisterActivity extends BaseActivity {
     @ViewInject(R.id.spn_register_city)
     private Spinner spn_userCity;
     @ViewInject(R.id.edt_register_userAddress)
-    private Spinner edt_address;
+    private EditText edt_address;
     @ViewInject(R.id.edt_register_petNickName)
-    private Spinner edt_petNickName;
+    private EditText edt_petNickName;
     @ViewInject(R.id.spn_register_petSex)
     private Spinner spn_petSex;
     @ViewInject(R.id.edt_register_petAge)
-    private Spinner edt_petAge;
+    private EditText edt_petAge;
     @ViewInject(R.id.spn_register_petKind)
     private Spinner spn_petKind;
     @ViewInject(R.id.edt_register_petHabit)
-    private Spinner edt_petHabit;
+    private EditText edt_petHabit;
     @ViewInject(R.id.img_register_petImage)
-    private Spinner img_petImage;
+    private ImageView img_petImage;
     @ViewInject(R.id.btn_register_confirm)
     private View btn_register_confirm;
 
