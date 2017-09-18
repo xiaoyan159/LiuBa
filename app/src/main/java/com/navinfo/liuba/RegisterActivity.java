@@ -52,7 +52,7 @@ public class RegisterActivity extends BaseActivity {
 
         //初始化省市联动控件
         ProvinceAndCity provinceAndCity = new ProvinceAndCity(RegisterActivity.this, spn_userProvince, spn_userCity);
-        
+
     }
 
 
