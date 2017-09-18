@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true">
 
     <include
-        android:id="@+id/layer_regiest_title"
+        android:id="@+id/layer_register_title"
         layout="@layout/layer_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/btn_regiest_confirm"
+            android:id="@+id/btn_register_confirm"
             style="@style/bottomLayerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/layer_bottom"
-        android:layout_below="@id/layer_regiest_title">
+        android:layout_below="@id/layer_register_title">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,11 +83,12 @@
                     android:textSize="@dimen/default_font_size" />
 
                 <EditText
+                    android:id="@+id/edt_register_userName"
+                    style="@style/itemEditTextStyle"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
                     android:text="123"
-                    style="@style/itemEditTextStyle"
                     android:textSize="@dimen/default_font_size" />
             </LinearLayout>
 
@@ -107,11 +108,12 @@
                     android:textSize="@dimen/default_font_size" />
 
                 <EditText
+                    android:id="@+id/edt_register_userPhone"
+                    style="@style/itemEditTextStyle"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
                     android:text="123"
-                    style="@style/itemEditTextStyle"
                     android:textSize="@dimen/default_font_size" />
             </LinearLayout>
 
@@ -131,14 +133,16 @@
                     android:textSize="@dimen/default_font_size" />
 
                 <Spinner
-                    android:layout_width="120dp"
+                    android:id="@+id/spn_register_province"
+                    android:layout_width="140dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
                     android:text="123"
                     android:textSize="@dimen/default_font_size" />
 
                 <Spinner
-                    android:layout_width="120dp"
+                    android:id="@+id/spn_register_city"
+                    android:layout_width="140dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
                     android:text="123"
@@ -162,11 +166,12 @@
                     android:visibility="invisible" />
 
                 <EditText
+                    android:id="@+id/edt_register_userAddress"
+                    style="@style/itemEditTextStyle"
                     android:layout_width="245dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
                     android:text="123"
-                    style="@style/itemEditTextStyle"
                     android:textSize="@dimen/default_font_size" />
             </LinearLayout>
 
@@ -210,12 +215,12 @@
                         android:textSize="@dimen/default_font_size" />
 
                     <EditText
-                        android:id="@+id/edit_nickName"
+                        android:id="@+id/edt_register_petNickName"
+                        style="@style/itemEditTextStyle"
                         android:layout_width="150dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
                         android:text="123"
-                        style="@style/itemEditTextStyle"
                         android:textSize="@dimen/default_font_size" />
                 </LinearLayout>
 
@@ -237,6 +242,7 @@
                         android:textSize="@dimen/default_font_size" />
 
                     <Spinner
+                        android:id="@+id/spn_register_petSex"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
@@ -249,8 +255,8 @@
                     android:id="@+id/linear_age"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/item_padding_vertical"
                     android:layout_below="@+id/linear_gender"
+                    android:layout_marginTop="@dimen/item_padding_vertical"
                     android:orientation="horizontal">
 
                     <TextView
@@ -263,6 +269,7 @@
                         android:textSize="@dimen/default_font_size" />
 
                     <Spinner
+                        android:id="@+id/spn_register_petAge"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
@@ -275,8 +282,8 @@
                     android:id="@+id/linear_breed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/item_padding_vertical"
                     android:layout_below="@+id/linear_age"
+                    android:layout_marginTop="@dimen/item_padding_vertical"
                     android:orientation="horizontal">
 
                     <TextView
@@ -289,6 +296,7 @@
                         android:textSize="@dimen/default_font_size" />
 
                     <Spinner
+                        android:id="@+id/spn_register_petKind"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
@@ -315,6 +323,7 @@
                         android:textSize="@dimen/default_font_size" />
 
                     <EditText
+                        android:id="@+id/edt_register_petHabit"
                         android:layout_width="260dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
@@ -329,12 +338,15 @@
                     android:layout_marginRight="@dimen/primary_padding"
                     android:background="@drawable/shape_btn_bg_4_corner_normal_stroke"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="照片"/>
+                        android:text="照片" />
+
                     <ImageView
+                        android:id="@+id/img_register_petImage"
                         android:layout_width="128dp"
                         android:layout_height="128dp"
                         android:layout_gravity="center" />
