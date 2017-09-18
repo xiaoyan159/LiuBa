@@ -220,7 +220,7 @@
                         android:layout_width="150dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
-                        android:text="123"
+                        android:hint="宠物昵称"
                         android:textSize="@dimen/default_font_size" />
                 </LinearLayout>
 
@@ -268,12 +268,14 @@
                         android:textColor="#66D973"
                         android:textSize="@dimen/default_font_size" />
 
-                    <Spinner
-                        android:id="@+id/spn_register_petAge"
+                    <EditText
+                        android:id="@+id/edt_register_petAge"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
-                        android:text="123"
+                        android:hint="宠物年龄"
+                        android:inputType="number"
+                        style="@style/itemEditTextStyle"
                         android:textSize="@dimen/default_font_size" />
 
                 </LinearLayout>
