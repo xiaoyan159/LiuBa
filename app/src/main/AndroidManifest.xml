@@ -2,59 +2,66 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.navinfo.liuba">
 
-    <!--百度地图需要的权限-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 百度地图需要的权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
     <application
-        android:name="com.navinfo.liuba.LiuBaApplication"
+        android:name=".LiuBaApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name="com.navinfo.liuba.RegisterActivity"
+            android:name=".RegisterActivity"
             android:label="注册">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".OrderInputActivity"
+            android:label="订单填写" />
+        <activity
+            android:name=".OrderConfirmActivity"
+            android:label="订单确认" />
+        <activity
+            android:name=".MyOrderListActivity"
+            android:label="订单列表" />
+        <activity
+            android:name=".PaymentSelect"
+            android:label="支付" />
+        <activity
+            android:name=".PaymentConfirm"
+            android:label="支付成功" />
+        <activity
+            android:name=".MyScretActivity"
+            android:label="密码锁" />
+
+        <!-- 百度地图的开发者key -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="pgBIviTd0pLCxYVPLlwG27oQCfgIUfra" />
+
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.navinfo.liuba.BaseActivity"></activity>
-        <activity android:name="com.navinfo.liuba.MainActivity"></activity>
-        <activity
-            android:name="com.navinfo.liuba.OrderInputActivity"
-            android:label="订单填写"></activity>
-        <activity
-            android:name="com.navinfo.liuba.OrderConfirmActivity"
-            android:label="订单确认"></activity>
-        <activity
-            android:name="com.navinfo.liuba.MyOrderListActivity"
-            android:label="订单列表"></activity>
-        <activity
-            android:name="com.navinfo.liuba.PaymentSelect"
-            android:label="支付"></activity>
-        <activity
-            android:name="com.navinfo.liuba.PaymentConfirm"
-            android:label="支付成功"></activity>
-        <activity
-            android:name="com.navinfo.liuba.MyScretActivity"
-            android:label="密码锁"></activity>
-
-        <!--百度地图的开发者key-->
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="pgBIviTd0pLCxYVPLlwG27oQCfgIUfra" />
     </application>
 
 </manifest>
