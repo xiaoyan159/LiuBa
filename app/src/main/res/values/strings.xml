@@ -17,4 +17,21 @@
 
     <string name="pay_select">去支付>></string>
     <string name="pay_success_tips">感谢您使用“溜吧”\n\n订单正在处理中，遛狗师会很快与您取得联系\n\n请保持电话畅通</string>
+
+    <string-array name="sexArray">
+        <item>公</item>
+        <item>母</item>
+    </string-array>
+    <!--松狮\阿拉斯加\比熊\法国斗牛\贵宾犬\哈士奇\金毛\拉布拉多\萨摩耶-->
+    <string-array name="kindArray">
+        <item>松狮</item>
+        <item>阿拉斯加</item>
+        <item>比熊</item>
+        <item>法国斗牛</item>
+        <item>贵宾犬</item>
+        <item>哈士奇</item>
+        <item>金毛</item>
+        <item>拉布拉多</item>
+        <item>萨摩耶</item>
+    </string-array>
 </resources>
