@@ -351,5 +351,30 @@
             android:layout_centerInParent="true"
             android:clickable="true"
             android:src="@mipmap/dog_avatar" />
+
+        <ImageView
+            android:id="@+id/img_shit_location"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="300dp"
+            android:clickable="true"
+            android:src="@mipmap/icon_shit"
+            android:visibility="gone"
+            android:contextClickable="true"
+            />
+
+        <ImageView
+            android:id="@+id/img_pee_location"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="350dp"
+            android:clickable="true"
+            android:src="@mipmap/icon_pee"
+            android:visibility="gone"
+            android:contextClickable="true"
+            />
+
     </RelativeLayout>
 </FrameLayout>
