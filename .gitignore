@@ -14,3 +14,12 @@
 .externalNativeBuild
 /gradle/wrapper/gradle-wrapper.properties
 /app/build.gradle
+/app/app.iml
+/app/.gitignore
+/MyApplication.iml
+/Liuba.jks
+/gradlew
+/.gitignore
+/LiuBa.iml
+/README.md
+/gradlew.bat
