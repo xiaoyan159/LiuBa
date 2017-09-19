@@ -13,74 +13,83 @@
         layout="@layout/layer_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        ></include>
+        android:layout_alignParentTop="true"></include>
 
     <LinearLayout
         android:id="@+id/layer_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/colorFontPrimaryDark"
             android:layout_marginBottom="@dimen/fab_margin"
-            android:text="@string/fee_tips"/>
+            android:gravity="center"
+            android:text="@string/fee_tips"
+            android:textColor="@color/colorFontPrimaryDark" />
+
         <RelativeLayout
             android:id="@+id/layer_order_input_confirm"
+            style="@style/bottomLayerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            style="@style/bottomLayerStyle">
+            android:orientation="horizontal">
+
             <TextView
-                android:layout_centerInParent="true"
+                style="@style/bottomTextBgStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title_confirm"
-                style="@style/bottomTextBgStyle"/>
+                android:layout_centerInParent="true"
+                android:text="@string/title_confirm" />
         </RelativeLayout>
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/fab_margin"
+        android:layout_above="@id/layer_bottom"
         android:layout_below="@id/layer_order_input_title"
-        android:layout_above="@id/layer_bottom">
+        android:padding="@dimen/fab_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
+                    style="@style/subTitleStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/subTitleStyle"
-                    android:text="选择日期"/>
+                    android:text="选择日期" />
+
                 <LinearLayout
+                    style="@style/itemLayerStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/itemLayerStyle"
                     android:orientation="horizontal">
+
                     <TextView
+                        style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="预约日期"
-                        style="@style/itemTvStyle"/>
-                    <Space
-                        style="@style/itemSpaceStyle"/>
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:text="预约日期" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <TextView
+                        android:id="@+id/edt_order_input_date"
                         style="@style/itemEditTextStyle"
-                        android:hint="@string/hint_reservation_date"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:inputType="none"
+                        android:hint="@string/hint_reservation_date" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -88,47 +97,55 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
+                    style="@style/subTitleStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/subTitleStyle"
-                    android:text="选择时间"/>
+                    android:text="选择时间" />
+
                 <LinearLayout
+                    style="@style/itemLayerStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/itemLayerStyle"
                     android:orientation="horizontal">
+
                     <TextView
+                        style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="开始时间"
-                        style="@style/itemTvStyle"/>
-                    <Space
-                        style="@style/itemSpaceStyle" />
-                    <EditText
+                        android:text="开始时间" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <TextView
+                        android:id="@+id/edt_order_input_time"
+                        style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_start_time"
-                        style="@style/itemEditTextStyle"/>
+                        android:inputType="none"
+                        android:hint="@string/hint_start_time" />
                 </LinearLayout>
 
                 <LinearLayout
+                    style="@style/itemLayerStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/itemLayerStyle"
                     android:orientation="horizontal">
+
                     <TextView
+                        style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="遛狗时长"
-                        style="@style/itemTvStyle"/>
-                    <Space
-                        style="@style/itemSpaceStyle" />
+                        android:text="遛狗时长" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
                     <EditText
+                        style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_start_time"
-                        style="@style/itemEditTextStyle"/>
+                        android:hint="@string/hint_start_time" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -136,28 +153,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <TextView
+                    style="@style/subTitleStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/subTitleStyle"
-                    android:text="选择范围"/>
+                    android:text="选择范围" />
+
                 <LinearLayout
+                    style="@style/itemLayerStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/itemLayerStyle"
                     android:orientation="horizontal">
+
                     <TextView
+                        style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="遛狗区域"
-                        style="@style/itemTvStyle"/>
-                    <Space
-                        style="@style/itemSpaceStyle" />
+                        android:text="遛狗区域" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
                     <EditText
+                        style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_liu_area"
-                        style="@style/itemEditTextStyle"/>
+                        android:hint="@string/hint_liu_area" />
                 </LinearLayout>
 
             </LinearLayout>

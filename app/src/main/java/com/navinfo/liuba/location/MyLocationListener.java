@@ -116,6 +116,7 @@ public class MyLocationListener implements BDLocationListener {
         }
     }
 
+    //获取当前位置，每秒实时更新
     public BDLocation getCurrentLocation() {
         return currentLocation;
     }

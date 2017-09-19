@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LiuBa</string>
+    <string name="app_name">溜吧</string>
     <string name="title_activity_order_input">OrderInputActivity</string>
     <string name="title_back">返回</string>
     <string name="title_confirm">确定</string>

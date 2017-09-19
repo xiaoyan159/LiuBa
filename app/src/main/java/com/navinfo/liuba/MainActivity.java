@@ -7,7 +7,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
+import com.navinfo.liuba.util.LiuBaApplication;
+import com.navinfo.liuba.util.SystemConstant;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -57,6 +65,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mCompeleteWalkTheDog.setOnClickListener(this);
 
         mMapView = (MapView) findViewById(R.id.bmapView);
+
+        //获取当前的定位位置
+        if (((LiuBaApplication) getApplication()).getCurrentLocation() != null) {
+            // 开启定位图层
+            mMapView.getMap().setMyLocationEnabled(true);
+            // 构造定位数据
+            MyLocationData locData = new MyLocationData.Builder().latitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLatitude())
+                    .longitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLongitude()).build();
+            // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+            mMapView.getMap().setMyLocationData(locData);
+            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.rootPath + SystemConstant.herderJpgPath);
+            MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
+            mMapView.getMap().setMyLocationConfiguration(config);
+            //设置地图显示比例尺
+            float f = mMapView.getMap().getMaxZoomLevel();//19.0 最小比例尺
+            MapStatusUpdate u = MapStatusUpdateFactory.zoomTo(f - 5);//大小按需求计算就可以
+            mMapView.getMap().animateMapStatus(u);
+        }
     }
 
     @Override
