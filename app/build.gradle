@@ -48,18 +48,18 @@ dependencies {
 //    时间日期选择控件
     compile 'com.code-troopers.betterpickers:library:3.1.0'
     //检查运行时权限的第三方库https://github.com/yanzhenjie/AndPermission/blob/master/README-CN.md
-
     compile 'com.yanzhenjie:permission:1.1.0'
     //圆形头像的显示控件https://github.com/hdodenhof/CircleImageView
-
     compile 'de.hdodenhof:circleimageview:2.1.0'
     //裁剪图片的第三方库http://www.jianshu.com/p/35ce3b82773e
-
     compile 'com.linchaolong.android:imagepicker:1.5'
+    //对话框的第三方库https://github.com/orhanobut/dialogplus
+    compile 'com.orhanobut:dialogplus:1.11@aar'
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/httpmime-4.1.2.jar')
     compile files('libs/jcore-android-1.1.6.jar')
     compile files('libs/jmessage-android_v2.2.1.jar')
     compile files('libs/IndoorscapeAlbumPlugin.jar')
+    compile files('libs/fastjson-1.1.43.android.jar')
 }
 

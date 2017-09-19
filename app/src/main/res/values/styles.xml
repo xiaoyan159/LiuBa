@@ -43,8 +43,9 @@
         <item name="android:layout_height">1dp</item>
     </style>
     <!--内容面板item的输入框style-->
-    <style name="itemEditTextStyle" >
+    <style name="itemEditTextStyle" parent="android:Widget.Holo.TextView">
         <item name="android:background">@drawable/shape_edt_bg_4_corner</item>
+        <item name="android:textSize">@dimen/default_font_size</item>
     </style>
     <!--底部按钮的背景style-->
     <style name="bottomLayerStyle" >

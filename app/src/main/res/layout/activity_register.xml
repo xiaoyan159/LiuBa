@@ -270,12 +270,12 @@
 
                     <EditText
                         android:id="@+id/edt_register_petAge"
+                        style="@style/itemEditTextStyle"
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
                         android:hint="宠物年龄"
                         android:inputType="number"
-                        style="@style/itemEditTextStyle"
                         android:textSize="@dimen/default_font_size" />
 
                 </LinearLayout>
@@ -326,10 +326,11 @@
 
                     <EditText
                         android:id="@+id/edt_register_petHabit"
+                        style="@style/itemEditTextStyle"
                         android:layout_width="260dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
-                        android:text="123"
+                        android:lines="3"
                         android:textSize="@dimen/default_font_size" />
                 </LinearLayout>
 
