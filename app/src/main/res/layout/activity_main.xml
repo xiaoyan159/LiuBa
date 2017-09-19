@@ -98,37 +98,45 @@
                     android:orientation="horizontal">
 
                     <RadioButton
+                        android:id="@+id/total_mile"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:button="@null"
+                        android:clickable="false"
                         android:drawableTop="@mipmap/icon_distance"
                         android:gravity="center"
                         android:text="3.5km" />
 
                     <RadioButton
+                        android:id="@+id/total_time"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:button="@null"
+                        android:clickable="false"
                         android:drawableTop="@mipmap/icon_time"
                         android:gravity="center"
                         android:text="60m" />
 
                     <RadioButton
+                        android:id="@+id/is_shit"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:button="@null"
+                        android:clickable="false"
                         android:drawableTop="@mipmap/icon_shit"
                         android:gravity="center"
                         android:text="√" />
 
                     <RadioButton
+                        android:id="@+id/is_pee"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:button="@null"
+                        android:clickable="false"
                         android:drawableTop="@mipmap/icon_pee"
                         android:gravity="center"
                         android:text="√" />
@@ -151,6 +159,130 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:text="完成" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_activity_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#66D973"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="时间"
+                        android:textSize="22sp" />
+
+                    <Chronometer
+                        android:id="@+id/start_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="#ffffff"
+                        android:format="%s"
+                        android:gravity="center"
+                        android:minHeight="20dp"
+                        android:minWidth="60dp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_start"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#66D973"
+                    android:text="开始"
+                    android:textColor="#ffffff"
+                    android:textSize="50sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="1dp"
+                    android:layout_weight="1"
+                    android:background="#66D973"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="里程"
+                        android:textSize="22sp" />
+
+                    <TextView
+                        android:id="@+id/start_mile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:background="#ffffff"
+                        android:minWidth="60dp" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_activity_go_on_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:id="@+id/linear_go_on"
+                    style="@style/bottomLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/bottomTextBgStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:text="继续" />
+
+                </LinearLayout>
+
+                <Space
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/linear_end"
+                    style="@style/bottomLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        style="@style/bottomTextBgStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:text="结束" />
 
                 </LinearLayout>
 
@@ -200,7 +332,9 @@
                         android:text="约" />
 
                 </LinearLayout>
+
             </LinearLayout>
+
         </LinearLayout>
 
         <com.baidu.mapapi.map.MapView
