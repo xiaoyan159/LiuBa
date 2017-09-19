@@ -14,8 +14,11 @@ import android.widget.Spinner;
 import com.linchaolong.android.imagepicker.ImagePicker;
 import com.linchaolong.android.imagepicker.cropper.CropImage;
 import com.linchaolong.android.imagepicker.cropper.CropImageView;
+import com.litesuits.common.assist.Check;
 import com.litesuits.common.io.FileUtils;
+import com.navinfo.liuba.util.CheckResult;
 import com.navinfo.liuba.util.SystemConstant;
+import com.navinfo.liuba.view.AddressSuggestPopup;
 import com.navinfo.liuba.view.ProvinceAndCity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
@@ -121,35 +124,16 @@ public class RegisterActivity extends BaseActivity {
                 dialogPlus.show();
             }
         });
+
+        //设置在线地址建议
+        if (provinceAndCity != null && !Check.isEmpty(provinceAndCity.getCityName()))
+            AddressSuggestPopup.getInstance().addSuggestEditText(RegisterActivity.this, edt_address, provinceAndCity.getCityName());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         imagePicker.onActivityResult(RegisterActivity.this, requestCode, resultCode, data);
-//        if (requestCode == TAKE_PICTURE) {
-//            if (resultCode == RESULT_OK) {
-//                Bitmap bm = (Bitmap) data.getExtras().get("data");
-//                img_petImage.setImageBitmap(bm);//想图像显示在ImageView视图上，private ImageView img;
-//                File myCaptureFile = new File(SystemConstant.rootPath + SystemConstant.herderJpgPath);
-//                try {
-//                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
-//                    /* 采用压缩转档方法 */
-//                    bm.compress(Bitmap.CompressFormat.JPEG, 85, bos);
-//                    /* 调用flush()方法，更新BufferStream */
-//                    bos.flush();
-//                    /* 结束OutputStream */
-//                    bos.close();
-//                } catch (FileNotFoundException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//
-//                } catch (IOException e) {
-//                    // TODO Auto-generated catch block
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
     }
 
     @Override
@@ -197,4 +181,8 @@ public class RegisterActivity extends BaseActivity {
                     .setAspectRatio(9, 9);
         }
     };
+
+    private CheckResult getRegiestCheckResult() {
+        return CheckResult.RESULT_FAIL;
+    }
 }

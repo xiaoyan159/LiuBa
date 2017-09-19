@@ -142,10 +142,12 @@
                     <Space style="@style/itemSpaceStyle" />
 
                     <EditText
+                        android:id="@+id/edt_order_input_timeLong"
+                        android:inputType="number"
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_start_time" />
+                        android:hint="@string/hint_time_long" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -175,6 +177,8 @@
                     <Space style="@style/itemSpaceStyle" />
 
                     <EditText
+                        android:id="@+id/edt_order_input_distance"
+                        android:inputType="number"
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
