@@ -14,15 +14,21 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
+import com.navinfo.liuba.util.LiuBaApplication;
+import com.navinfo.liuba.util.SystemConstant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.navinfo.liuba.R.id.start_time;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -87,7 +93,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mLinearWalkAppoint = (LinearLayout) findViewById(R.id.linear_activity_walk_appoint);//遛，约，布局
         mLinearComplete = (LinearLayout) findViewById(R.id.linear_complete);//完成界面
         mLinearStart = (LinearLayout) findViewById(R.id.linear_activity_start);//开始界面
-        mTvTime = (Chronometer) findViewById(start_time);
+        mTvTime = (Chronometer) findViewById(R.id.start_time);
         mTvMile = (TextView) findViewById(R.id.start_mile);
         btnStart = (Button) findViewById(R.id.btn_start);
         mLinearGoEnd = (LinearLayout) findViewById(R.id.linear_activity_go_on_end);
@@ -105,6 +111,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         mMapView = (MapView) findViewById(R.id.bmapView);
 
+        //获取当前的定位位置
+        if (((LiuBaApplication) getApplication()).getCurrentLocation() != null) {
+            // 开启定位图层
+            mMapView.getMap().setMyLocationEnabled(true);
+            // 构造定位数据
+            MyLocationData locData = new MyLocationData.Builder().latitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLatitude())
+                    .longitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLongitude()).build();
+            // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+            mMapView.getMap().setMyLocationData(locData);
+            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.rootPath + SystemConstant.herderJpgPath);
+            MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
+            mMapView.getMap().setMyLocationConfiguration(config);
+            //设置地图显示比例尺
+            float f = mMapView.getMap().getMaxZoomLevel();//19.0 最小比例尺
+            MapStatusUpdate u = MapStatusUpdateFactory.zoomTo(f - 5);//大小按需求计算就可以
+            mMapView.getMap().animateMapStatus(u);
+        }
         trackList = new ArrayList<>();
         liuBaApplication = (LiuBaApplication) getApplication();
 

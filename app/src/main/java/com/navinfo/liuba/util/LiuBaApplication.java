@@ -1,14 +1,25 @@
-package com.navinfo.liuba;
+package com.navinfo.liuba.util;
 
 import android.app.Application;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.navinfo.liuba.BuildConfig;
 import com.navinfo.liuba.location.MyLocationListener;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
+import com.yanzhenjie.permission.PermissionListener;
+import com.yanzhenjie.permission.Rationale;
+import com.yanzhenjie.permission.RationaleListener;
 
 import org.xutils.x;
+
+import java.util.List;
 
 import cn.jpush.im.android.api.JMessageClient;
 
@@ -21,6 +32,8 @@ public class LiuBaApplication extends Application {
     public LocationClient mLocationClient = null;
     //BDAbstractLocationListener为7.2版本新增的Abstract类型的监听接口，原有BDLocationListener接口暂时同步保留
     public MyLocationListener myListener = new MyLocationListener();
+
+    public static String rootPath = null;
 
     @Override
     public void onCreate() {
@@ -39,6 +52,10 @@ public class LiuBaApplication extends Application {
         mLocationClient.registerLocationListener(myListener);
         initLocation();
         mLocationClient.start();
+
+        rootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        //检查运行时权限
+        withPermissionAll();
     }
 
     //初始化百度定位的参数
@@ -84,10 +101,33 @@ public class LiuBaApplication extends Application {
         mLocationClient.setLocOption(option);
     }
 
+    //获取当前的位置
     public BDLocation getCurrentLocation() {
         if (myListener != null) {
             return myListener.getCurrentLocation();
         }
         return null;
+    }
+
+    //申请所需的权限
+    private void withPermissionAll() {
+        AndPermission.with(LiuBaApplication.this)
+                .requestCode(100)
+                .permission(Permission.CAMERA, Permission.LOCATION, Permission.STORAGE)
+                .callback(new PermissionListener() {
+                    @Override
+                    public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
+                    }
+
+                    @Override
+                    public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
+                        Toast.makeText(LiuBaApplication.this, "无法获取权限，部分功能可能不可用", Toast.LENGTH_SHORT).show();
+                    }
+                }).rationale(new RationaleListener() {
+            @Override
+            public void showRequestPermissionRationale(int requestCode, Rationale rationale) {
+                AndPermission.rationaleDialog(LiuBaApplication.this, rationale).show();
+            }
+        }).start();
     }
 }
