@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static android.R.attr.handle;
 import static android.R.attr.tag;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
@@ -128,6 +129,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mLinearEnd.setOnClickListener(this);
         imgShit.setOnClickListener(this);
         imgPee.setOnClickListener(this);
+        mLinearComplete.setOnClickListener(this);
 
         mMapView = (MapView) findViewById(R.id.bmapView);
 
@@ -175,10 +177,42 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         ifShit = 0;
                         ifPee = 0;
                     }
+
                 }, 1000, 1000);//1秒之后，每隔2秒做一次run()操作
             }
             if (msg.what == 1) {
                 timer.cancel();
+            }
+            if (msg.what == 3) {
+                if (trackList != null && trackList.size() > 0) {
+                    String content = createTrackJson(trackList);
+                    String urlPath = "http://localhost/service/liuba/trackPoint/create/?parameter=" + content;
+                    URL url = null;
+                    try {
+                        url = new URL(urlPath);
+                        // 把封装好的数据传递过去
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setConnectTimeout(5000);
+                        // 设置允许输出
+                        conn.setDoOutput(true);
+                        conn.setRequestMethod("POST");
+                        //服务器返回的响应码
+                        int code = conn.getResponseCode();
+                        if (code == 0) {
+                            Toast.makeText(MainActivity.this, "轨迹提交成功", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "数据提交失败", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (ProtocolException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "无轨迹数据", Toast.LENGTH_LONG).show();
+                }
             }
         }
     };
@@ -215,12 +249,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(secretIntent);
                 break;
 
-            case R.id.complete_walk_the_dog:
-                mLinearWalkAppoint.setVisibility(View.VISIBLE);
-                mCompeleteWalkTheDog.setVisibility(View.GONE);
-                btnStart.setText("开始");
-                mTvTime.setBase(SystemClock.elapsedRealtime());//计时器清零
-                break;
             case R.id.btn_start:
                 if (btnStart.getText().toString().equals("开始")) {
                     mTvTime.start();
@@ -287,32 +315,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 tagPee = true;
                 break;
             case R.id.linear_complete:
-
-                String content = createTrackJson(trackList);
-                String urlPath = "http://localhost/service/liuba/trackPoint/create/?parameter=" + content;
-                URL url = null;
-                try {
-                    url = new URL(urlPath);
-                    // 把封装好的数据传递过去
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setConnectTimeout(5000);
-                    // 设置允许输出
-                    conn.setDoOutput(true);
-                    conn.setRequestMethod("POST");
-                    //服务器返回的响应码
-                    int code = conn.getResponseCode();
-                    if (code == 0) {
-                        Toast.makeText(this, "轨迹提交成功", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "数据提交失败", Toast.LENGTH_LONG).show();
-                    }
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (ProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                mLinearWalkAppoint.setVisibility(View.VISIBLE);
+                mCompeleteWalkTheDog.setVisibility(View.GONE);
+                btnStart.setText("开始");
+                mTvTime.setBase(SystemClock.elapsedRealtime());//计时器清零
+                Message upLoadTrack = new Message();
+                upLoadTrack.what = 3;
+                mHandler.handleMessage(upLoadTrack);
                 break;
         }
 
