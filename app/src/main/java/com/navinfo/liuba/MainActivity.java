@@ -12,7 +12,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -24,11 +27,19 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.navinfo.liuba.util.LiuBaApplication;
 import com.navinfo.liuba.util.SystemConstant;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static android.R.attr.handle;
+import static android.R.attr.tag;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -51,6 +62,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RadioButton totalTime;
     private RadioButton isShit;
     private RadioButton isPee;
+    private ImageView imgShit;
+    private ImageView imgPee;
+    private int ifShit = 0;
+    private int ifPee = 0;
+    private boolean tagShit = false;
+    private boolean tagPee = false;
 
     private View layer_user_menu;//用户菜单的布局，点击左上角按钮显示
     private TextView tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
@@ -103,11 +120,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         totalTime = (RadioButton) findViewById(R.id.total_time);
         isShit = (RadioButton) findViewById(R.id.is_shit);
         isPee = (RadioButton) findViewById(R.id.is_pee);
+        imgShit = (ImageView) findViewById(R.id.img_shit_location);
+        imgPee = (ImageView) findViewById(R.id.img_pee_location);
 
         mCompeleteWalkTheDog.setOnClickListener(this);
         btnStart.setOnClickListener(this);
         mLinearGoOn.setOnClickListener(this);
         mLinearEnd.setOnClickListener(this);
+        imgShit.setOnClickListener(this);
+        imgPee.setOnClickListener(this);
+        mLinearComplete.setOnClickListener(this);
 
         mMapView = (MapView) findViewById(R.id.bmapView);
 
@@ -148,17 +170,56 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         // TODO Auto-generated method stub
                         HashMap<String, Object> hashMap = new HashMap();
                         BDLocation currentLocation = liuBaApplication.getCurrentLocation();
-                        hashMap.put("Latitude", currentLocation.getLatitude());
-                        hashMap.put("Longitude", currentLocation.getLongitude());
+                        hashMap.put("geometry", createGeometryPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+                        hashMap.put("isShit", ifShit);
+                        hashMap.put("isPee", ifPee);
                         trackList.add(hashMap);
+                        ifShit = 0;
+                        ifPee = 0;
                     }
+
                 }, 1000, 1000);//1秒之后，每隔2秒做一次run()操作
             }
             if (msg.what == 1) {
                 timer.cancel();
             }
+            if (msg.what == 3) {
+                if (trackList != null && trackList.size() > 0) {
+                    String content = createTrackJson(trackList);
+                    String urlPath = "http://localhost/service/liuba/trackPoint/create/?parameter=" + content;
+                    URL url = null;
+                    try {
+                        url = new URL(urlPath);
+                        // 把封装好的数据传递过去
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setConnectTimeout(5000);
+                        // 设置允许输出
+                        conn.setDoOutput(true);
+                        conn.setRequestMethod("POST");
+                        //服务器返回的响应码
+                        int code = conn.getResponseCode();
+                        if (code == 0) {
+                            Toast.makeText(MainActivity.this, "轨迹提交成功", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(MainActivity.this, "数据提交失败", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (ProtocolException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "无轨迹数据", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     };
+
+    public String createGeometryPoint(double lattitude, double longtitude) {
+        return "POINT(" + lattitude + " " + longtitude + ")";
+    }
 
     @Override
     public void onClick(View v) {
@@ -188,12 +249,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(secretIntent);
                 break;
 
-            case R.id.complete_walk_the_dog:
-                mLinearWalkAppoint.setVisibility(View.VISIBLE);
-                mCompeleteWalkTheDog.setVisibility(View.GONE);
-                btnStart.setText("开始");
-                mTvTime.setBase(SystemClock.elapsedRealtime());//计时器清零
-                break;
             case R.id.btn_start:
                 if (btnStart.getText().toString().equals("开始")) {
                     mTvTime.start();
@@ -201,6 +256,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Message msg = new Message();
                     msg.what = 0;
                     mHandler.handleMessage(msg);
+                    imgShit.setVisibility(View.VISIBLE);
+                    imgPee.setVisibility(View.VISIBLE);
                 } else {
                     pauseString = convertStrTimeToLong(mTvTime.getText().toString());
                     mTvTime.stop();
@@ -209,6 +266,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Message msg = new Message();
                     msg.what = 1;
                     mHandler.handleMessage(msg);
+                    imgShit.setVisibility(View.GONE);
+                    imgPee.setVisibility(View.GONE);
                 }
 
                 break;
@@ -221,6 +280,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Message msg = new Message();
                 msg.what = 0;
                 mHandler.handleMessage(msg);
+                imgShit.setVisibility(View.VISIBLE);
+                imgPee.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.linear_end://结束
@@ -230,8 +291,40 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Message msgs = new Message();
                 msgs.what = 1;
                 mHandler.handleMessage(msgs);
+                imgShit.setVisibility(View.GONE);
+                imgPee.setVisibility(View.GONE);
+                if (tagShit) {
+                    isShit.setText("√");
+                } else {
+                    isShit.setText("×");
+                }
+                tagShit = false;
+                if (tagPee) {
+                    isPee.setText("√");
+                } else {
+                    isPee.setText("×");
+                }
+                tagPee = false;
+                break;
+            case R.id.img_shit_location:
+                ifShit = 1;
+                tagShit = true;
+                break;
+            case R.id.img_pee_location:
+                ifPee = 1;
+                tagPee = true;
+                break;
+            case R.id.linear_complete:
+                mLinearWalkAppoint.setVisibility(View.VISIBLE);
+                mCompeleteWalkTheDog.setVisibility(View.GONE);
+                btnStart.setText("开始");
+                mTvTime.setBase(SystemClock.elapsedRealtime());//计时器清零
+                Message upLoadTrack = new Message();
+                upLoadTrack.what = 3;
+                mHandler.handleMessage(upLoadTrack);
                 break;
         }
+
     }
 
     /**
@@ -308,5 +401,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
+    }
+
+    public String createTrackJson(List<HashMap<String, Object>> list) {
+        JSONObject object = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        for (int i = 0; i < list.size(); i++) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("geometry", list.get(i).get("geometry"));
+            jsonObject.put("isShit", list.get(i).get("isShit"));
+            jsonObject.put("isPee", list.get(i).get("isPee"));
+            jsonArray.add(jsonObject);
+        }
+        object.put("data", jsonArray);
+        return object.toString();
     }
 }
