@@ -88,7 +88,6 @@
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
-                    android:text="123"
                     android:textSize="@dimen/default_font_size" />
             </LinearLayout>
 
@@ -112,8 +111,8 @@
                     style="@style/itemEditTextStyle"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
+                    android:inputType="number"
                     android:layout_marginLeft="5dp"
-                    android:text="123"
                     android:textSize="@dimen/default_font_size" />
             </LinearLayout>
 
@@ -171,7 +170,6 @@
                     android:layout_width="245dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="5dp"
-                    android:text="123"
                     android:textSize="@dimen/default_font_size" />
             </LinearLayout>
 
@@ -246,7 +244,6 @@
                         android:layout_width="120dp"
                         android:layout_height="40dp"
                         android:layout_marginLeft="5dp"
-                        android:text="123"
                         android:textSize="@dimen/default_font_size" />
 
                 </LinearLayout>

@@ -10,20 +10,30 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.linchaolong.android.imagepicker.ImagePicker;
 import com.linchaolong.android.imagepicker.cropper.CropImage;
 import com.linchaolong.android.imagepicker.cropper.CropImageView;
 import com.litesuits.common.assist.Check;
 import com.litesuits.common.io.FileUtils;
+import com.navinfo.liuba.entity.BaseResponse;
+import com.navinfo.liuba.entity.RegisterRequestEntity;
+import com.navinfo.liuba.entity.RegisterUser;
+import com.navinfo.liuba.util.BaseRequestParams;
 import com.navinfo.liuba.util.CheckResult;
 import com.navinfo.liuba.util.SystemConstant;
 import com.navinfo.liuba.view.AddressSuggestPopup;
+import com.navinfo.liuba.view.BaseToast;
+import com.navinfo.liuba.view.LoadingView;
 import com.navinfo.liuba.view.ProvinceAndCity;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnItemClickListener;
 
+import org.xutils.common.Callback;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -62,6 +72,8 @@ public class RegisterActivity extends BaseActivity {
     private ImagePicker imagePicker;
     private DialogPlus dialogPlus;
 
+    private String currentLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,8 +81,56 @@ public class RegisterActivity extends BaseActivity {
         btn_register_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent);
+                CheckResult result = getRegiestCheckResult();
+                if (result.isSuccess()) {
+                    //检查通过，开始获取数据
+                    final RegisterUser registerUser=getRegiestData();
+                    RegisterRequestEntity registerRequestEntity=new RegisterRequestEntity();
+                    registerRequestEntity.setData(registerUser);
+                    if (registerUser!=null){//开始向服务器请求数据
+                        LoadingView.getInstance(RegisterActivity.this).show();
+                        BaseRequestParams registerParams=new BaseRequestParams(SystemConstant.userInfoCreate);
+                        registerParams.setMultipart(true);
+                        registerParams.setParamerJson(JSON.toJSONString(registerRequestEntity));
+                        Callback.Cancelable cancelable=x.http().post(registerParams, new Callback.CommonCallback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                //服务器返回数据成功，记录用户id
+                                if (!Check.isEmpty(result)){
+                                    BaseResponse<String> reponse = JSON.parseObject(result, new TypeReference<BaseResponse<String>>() {
+                                    }.getType());
+                                    if (reponse.getErrcode()>=0){//注册成功
+                                        //注册成功，自动跳回登录界面
+                                        Intent registerOkIntent=new Intent();
+                                        registerOkIntent.getExtras().putSerializable(RegisterUser.class.getName(),registerUser);
+                                        setResult(RESULT_OK,registerOkIntent);
+                                        RegisterActivity.this.finish();
+                                    }else {
+                                        BaseToast.makeText(RegisterActivity.this, reponse.getErrmsg(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+                                BaseToast.makeText(RegisterActivity.this,"出错了，要不再点下试试...", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+                                LoadingView.getInstance(RegisterActivity.this).dismiss();
+                            }
+
+                            @Override
+                            public void onFinished() {
+                                LoadingView.getInstance(RegisterActivity.this).dismiss();
+                            }
+                        });
+                        LoadingView.getInstance(RegisterActivity.this).setCancelable(cancelable);
+                    }
+                } else {
+                    Toast.makeText(RegisterActivity.this, result.getDescript(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -183,6 +243,37 @@ public class RegisterActivity extends BaseActivity {
     };
 
     private CheckResult getRegiestCheckResult() {
-        return CheckResult.RESULT_FAIL;
+        if (Check.isEmpty(edt_userName.getText())) {
+            return new CheckResult(false, "用户姓名不能为空");
+        }
+        if (Check.isEmpty(edt_userPhone.getText())) {
+            return new CheckResult(false, "用户手机不能为空");
+        }
+        if (Check.isEmpty(edt_address.getText())) {
+            return new CheckResult(false, "用户地址不能为空");
+        }
+        if (Check.isEmpty(edt_petNickName.getText())) {
+            return new CheckResult(false, "宠物昵称不能为空");
+        }
+        if (Check.isEmpty(edt_petAge.getText())) {
+            return new CheckResult(false, "宠物昵称不能为空");
+        }
+        if (img_petImage.getDrawable() == null) {
+            return new CheckResult(false, "为宠物拍个照吧!");
+        }
+        return CheckResult.RESULT_SUCCESS;
+    }
+
+    private RegisterUser getRegiestData() {
+        RegisterUser registerUser = new RegisterUser();
+        registerUser.setUserRealName(edt_userName.getText().toString());
+        registerUser.setUserPhone(edt_userPhone.getText().toString());
+        registerUser.setUserAddress(spn_userProvince.getSelectedItem().toString() + spn_userCity.getSelectedItem().toString() + edt_address.getText().toString());
+        registerUser.setPetNickName(edt_petNickName.getText().toString());
+        registerUser.setPetSex(spn_petSex.getSelectedItemPosition());
+        registerUser.setPetAge(Integer.parseInt(edt_petAge.getText().toString()));
+        registerUser.setPetBreed(spn_petKind.getSelectedItem().toString());
+        registerUser.setPetHabit(edt_petHabit.getText().toString());
+        return registerUser;
     }
 }

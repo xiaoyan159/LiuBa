@@ -46,6 +46,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".LoginActivity"
+            android:launchMode="singleInstance">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".RegisterActivity"
             android:label="注册">
@@ -58,7 +66,7 @@
         <activity android:name="com.navinfo.liuba.BaseActivity"></activity>
         <activity android:name="com.navinfo.liuba.MainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleInstance"></activity>
+            android:launchMode="singleTask"></activity>
         <activity
             android:name=".OrderInputActivity"
             android:label="订单填写" />
@@ -87,13 +95,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="pgBIviTd0pLCxYVPLlwG27oQCfgIUfra" />
 
-        <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

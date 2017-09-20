@@ -1,6 +1,8 @@
 package com.navinfo.liuba.util;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
@@ -9,7 +11,9 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
+import com.litesuits.android.log.Log;
 import com.navinfo.liuba.BuildConfig;
+import com.navinfo.liuba.entity.RegisterUser;
 import com.navinfo.liuba.location.MyLocationListener;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -35,6 +39,9 @@ public class LiuBaApplication extends Application {
 
     public static String rootPath = null;
 
+    private SharedPreferences spf_config;//程序设置选项
+    private RegisterUser currentUser;//当前正在登录的用户信息
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -56,6 +63,9 @@ public class LiuBaApplication extends Application {
         rootPath = Environment.getExternalStorageDirectory().getAbsolutePath();
         //检查运行时权限
         withPermissionAll();
+
+        spf_config = getSharedPreferences(SystemConstant.CONFIG_SPF, Context.MODE_PRIVATE);
+        Log.setTag("LiuBa");
     }
 
     //初始化百度定位的参数
@@ -129,5 +139,17 @@ public class LiuBaApplication extends Application {
                 AndPermission.rationaleDialog(LiuBaApplication.this, rationale).show();
             }
         }).start();
+    }
+
+    public SharedPreferences getSpf_config() {
+        return spf_config;
+    }
+
+    public RegisterUser getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(RegisterUser currentUser) {
+        this.currentUser = currentUser;
     }
 }

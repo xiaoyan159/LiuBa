@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     .longitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLongitude()).build();
             // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
             mMapView.getMap().setMyLocationData(locData);
-            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.rootPath + SystemConstant.herderJpgPath);
+            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.herderJpgPath);
             MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
             mMapView.getMap().setMyLocationConfiguration(config);
             //设置地图显示比例尺

@@ -39,7 +39,8 @@ public class AddressSuggestPopup {
 
     private final String NAME = "name";
     private final String ICON = "icon";
-    private final String GEOPOINT = "GEOPOINT";
+    private final String LAT = "LAT";
+    private final String LON = "LON";
     private final String UID = "UID";
 
     private static AddressSuggestPopup instatnce;
@@ -111,6 +112,7 @@ public class AddressSuggestPopup {
                         edt.setText(addressMapList.get(position).get(NAME).toString());
                         edt.setSelection(edt.getText().length());
                         suggestPopup.dismiss();
+//                        edt.setTag(SystemConstant.CURRENT_LOCATION,);
                     }
                 }
             });
@@ -162,7 +164,8 @@ public class AddressSuggestPopup {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put(NAME, suggestionInfo.key);
                     map.put(ICON, R.mipmap.icon_address_location);
-                    map.put(GEOPOINT, suggestionInfo.pt);
+                    map.put(LAT, suggestionInfo.pt.latitude);
+                    map.put(LON, suggestionInfo.pt.longitude);
                     map.put(UID, suggestionInfo.uid);
                     map.put("type", 0);
                     listMap.add(map);
