@@ -1,6 +1,7 @@
 package com.navinfo.liuba;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,8 +15,10 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.baidu.location.BDLocation;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -24,9 +27,23 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
+import com.litesuits.common.io.FileUtils;
+import com.navinfo.liuba.enity.Point;
+import com.navinfo.liuba.enity.TrackEnity;
+import com.navinfo.liuba.entity.BaseResponse;
+import com.navinfo.liuba.location.GeoPoint;
+import com.navinfo.liuba.location.GeometryTools;
+import com.navinfo.liuba.util.BaseRequestParams;
+import com.navinfo.liuba.util.DefaultHttpUtil;
 import com.navinfo.liuba.util.LiuBaApplication;
 import com.navinfo.liuba.util.SystemConstant;
+import com.navinfo.liuba.view.BaseToast;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -37,6 +54,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.alibaba.fastjson.JSON.toJSONString;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -72,18 +91,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private MapView mMapView = null;
 
     private long pauseString;//暂停时字符串
-    private List<HashMap<String, Object>> trackList;
+    private List<TrackEnity> trackList;
     private LiuBaApplication liuBaApplication;
     private Timer timer;
+    OverlayOptions ooPolyline;
+    List<LatLng> points;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mView = View.inflate(MainActivity.this, R.layout.activity_main, null);
         setContentView(mView);
+
+        ooPolyline = new PolylineOptions();
+        points = new ArrayList<>();
+
         mImgUserCenter = (ImageView) mView.findViewById(R.id.user_center);
         btnWalk = mView.findViewById(R.id.walk_the_dog);
         btnAppoint = mView.findViewById(R.id.make_an_appointment);
+
         mImgUserCenter.setOnClickListener(this);
         btnWalk.setOnClickListener(this);
         btnAppoint.setOnClickListener(this);
@@ -162,16 +189,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     @Override
                     public void run() {
                         // TODO Auto-generated method stub
-                        HashMap<String, Object> hashMap = new HashMap();
                         BDLocation currentLocation = liuBaApplication.getCurrentLocation();
-                        hashMap.put("geometry", createGeometryPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
-                        hashMap.put("isShit", ifShit);
-                        hashMap.put("isPee", ifPee);
-                        trackList.add(hashMap);
-                        ifShit = 0;
-                        ifPee = 0;
+                        if (currentLocation.getLongitude() == currentLocation.getLatitude() && currentLocation.getLatitude() == 4.9e-324) {
+                            Toast.makeText(MainActivity.this, "定位失败！", Toast.LENGTH_LONG).show();
+                        } else {
+                            TrackEnity trackEnity = new TrackEnity();
+                            GeoPoint geopoint = new GeoPoint(currentLocation.getLongitude(), currentLocation.getLatitude());
+                            trackEnity.setGeometry(GeometryTools.createGeometry(geopoint).toString());
+                            trackEnity.setIsPee(ifPee);
+                            trackEnity.setIsShit(ifShit);
+                            trackList.add(trackEnity);
+                            ifShit = 0;
+                            ifPee = 0;
+                            //地图绘制图形
+                            // 构造折线点坐标
+                            points.add(new LatLng(currentLocation.getLongitude(), currentLocation.getLatitude()));
+                            if (points != null && points.size() > 1) {
+                                double totalMiles = getTotalMiles(points);
+//                                mTvMile.setText(totalMiles + "m");
+                                drawTrackLine(points);
+                            }
+                        }
                     }
-
                 }, 1000, 1000);//1秒之后，每隔2秒做一次run()操作
             }
             if (msg.what == 1) {
@@ -179,37 +218,48 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
             if (msg.what == 3) {
                 if (trackList != null && trackList.size() > 0) {
-                    String content = createTrackJson(trackList);
-                    String urlPath = "http://localhost/service/liuba/trackPoint/create/?parameter=" + content;
-                    URL url = null;
-                    try {
-                        url = new URL(urlPath);
-                        // 把封装好的数据传递过去
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setConnectTimeout(5000);
-                        // 设置允许输出
-                        conn.setDoOutput(true);
-                        conn.setRequestMethod("POST");
-                        //服务器返回的响应码
-                        int code = conn.getResponseCode();
-                        if (code == 0) {
+                    BaseRequestParams registerParams = new BaseRequestParams(SystemConstant.trackCreate);
+                    String json = JSON.toJSONString(trackList);
+                    registerParams.setParamerJson(json);
+
+                    DefaultHttpUtil.postMethod(MainActivity.this, registerParams, new DefaultHttpUtil.HttpCallback() {
+                        @Override
+                        public void onSuccess(String result) {
                             Toast.makeText(MainActivity.this, "轨迹提交成功", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "数据提交失败", Toast.LENGTH_LONG).show();
                         }
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (ProtocolException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    });
                 } else {
                     Toast.makeText(MainActivity.this, "无轨迹数据", Toast.LENGTH_LONG).show();
                 }
             }
         }
     };
+
+    /**
+     * 绘制轨迹
+     * * @param pointsList
+     */
+    public void drawTrackLine(List<LatLng> pointsList) {
+        mMapView.getMap().clear();
+        OverlayOptions ooPolyline = new PolylineOptions().width(10).points(pointsList).color(Integer.valueOf(Color.RED));
+        //添加在地图中
+        mMapView.getMap().addOverlay(ooPolyline);
+    }
+
+    /**
+     * 计算路径
+     *
+     * @param pointsList
+     * @return
+     */
+    public double getTotalMiles(List<LatLng> pointsList) {
+        double totalDiatance = 0;
+        for (int i = 1; i < pointsList.size(); i++) {
+            double distance = DistanceUtil.getDistance(pointsList.get(i - 1), pointsList.get(i));
+            totalDiatance = totalDiatance + distance;
+        }
+        return totalDiatance;
+    }
 
     public String createGeometryPoint(double lattitude, double longtitude) {
         return "POINT(" + lattitude + " " + longtitude + ")";
