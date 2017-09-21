@@ -6,6 +6,7 @@ package com.navinfo.liuba.util;
 
 public class SystemConstant {
     public static final String rootPath = LiuBaApplication.rootPath + "/Liuba";
+    public static final String IMESSAGE_USER_PREFIX = "Liuba";
     public static final String herderJpgDir = rootPath + "/avater/";
     public static final String herderJpgPath = herderJpgDir + "/avater.jpg";
     public static final String CONFIG_SPF = "CONFIG_SPF";//常规设置的sharedpreference文件名
@@ -19,9 +20,26 @@ public class SystemConstant {
     public static final String oederCreate = BASE_URL + "/orderInfo/create/";//创建订单
     public static final String oederListByStatus = BASE_URL + "/orderInfo/listByStatus/";//根据订单状态查询订单数据
     public static final String oederListByUser = BASE_URL + "/orderInfo/listByUserIdOrOrderClerkId/";//根据客户id或者接单人id查询订单接口
+    public static final String acceptOrder = BASE_URL + "/orderInfo/updateOrderStatus/";//遛狗师接单的接口
+    public static final String startOrder = BASE_URL + "/orderInfo/updateOrderStatusByOrderId/";//遛狗师接单的接口
+    public static final String orderTrackList = BASE_URL + "/trackPoint/listByOrderId/";//根据订单id查询轨迹点接口
 
 
     //intent中bundle对应的key
     public static final String BUNDLE_USER_INFO = "BUNDLE_USER_INFO";
     public static final String BUNDLE_ORDER_INFO = "BUNDLE_ORDER_INFO";
+
+    //EventBus的what值
+    public static final int EVENT_WHAT_REFRESH_ORDER_LIST = 0x201;
+    public static final int EVENT_WHAT_START_TASK = 0x202;
+
+    public static String getJPushUserName(String userId) {
+        String jPushUserName=IMESSAGE_USER_PREFIX + userId;
+        return jPushUserName;
+    }
+
+    public static String getJPushPWD(String userId) {
+        String jPushUserName=IMESSAGE_USER_PREFIX + userId;
+        return jPushUserName;
+    }
 }

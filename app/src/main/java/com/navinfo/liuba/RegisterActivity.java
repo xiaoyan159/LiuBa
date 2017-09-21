@@ -1,8 +1,16 @@
 package com.navinfo.liuba;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -40,6 +48,8 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 @ContentView(R.layout.activity_register)
@@ -202,6 +212,12 @@ public class RegisterActivity extends BaseActivity {
         @Override
         public void onCropImage(Uri imageUri) {
             super.onCropImage(imageUri);
+
+            Bitmap cropBitmap = getCroppedBitmap(getBitmapFromUri(imageUri), 256);
+            if (cropBitmap != null) {
+                saveBitmap(imageUri.getPath(), cropBitmap);
+            }
+
             x.image().bind(img_petImage, imageUri.toString());
             try {
                 FileUtils.copyFile(new File(imageUri.getPath()), new File(SystemConstant.herderJpgPath));
@@ -226,7 +242,7 @@ public class RegisterActivity extends BaseActivity {
                     // 圆形/矩形
                     .setCropShape(CropImageView.CropShape.OVAL)
                     // 调整裁剪后的图片最终大小（单位：px）
-                    .setRequestedSize(64, 64)
+                    .setRequestedSize(512, 512)
                     // 裁剪框宽高比
                     .setAspectRatio(9, 9);
         }
@@ -289,5 +305,69 @@ public class RegisterActivity extends BaseActivity {
             registerUser.setLocation(GeometryTools.createGeometry(currentGeoPoint).toString());
         }
         return registerUser;
+    }
+
+    /*
+     * 对Bitmap裁剪，使其变成圆形，这步最关键
+     */
+    public static Bitmap getCroppedBitmap(Bitmap bmp, int radius) {
+        Bitmap sbmp;
+        if (bmp.getWidth() != radius || bmp.getHeight() != radius)
+            sbmp = Bitmap.createScaledBitmap(bmp, radius, radius, false);
+        else
+            sbmp = bmp;
+
+        Bitmap output = Bitmap.createBitmap(sbmp.getWidth(), sbmp.getHeight(), Bitmap.Config.ARGB_8888);
+        final Rect rect = new Rect(0, 0, sbmp.getWidth(), sbmp.getHeight());
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setFilterBitmap(true);
+        paint.setDither(true);
+        paint.setColor(Color.parseColor("#BAB399"));
+
+        Canvas c = new Canvas(output);
+        c.drawARGB(0, 0, 0, 0);
+        c.drawCircle(sbmp.getWidth() / 2 + 0.7f, sbmp.getHeight() / 2 + 0.7f, sbmp.getWidth() / 2 + 0.1f, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        c.drawBitmap(sbmp, rect, rect, paint);
+
+        return output;
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        try {
+            // 读取uri所在的图片
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void saveBitmap(String bitName, Bitmap mBitmap) {
+        File f = new File(bitName);
+        try {
+            f.createNewFile();
+        } catch (IOException e) {
+        }
+        FileOutputStream fOut = null;
+        try {
+            fOut = new FileOutputStream(f);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+        try {
+            fOut.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

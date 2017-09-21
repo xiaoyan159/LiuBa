@@ -1,17 +1,31 @@
 package com.navinfo.liuba.view;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.navinfo.liuba.MyScretActivity;
 import com.navinfo.liuba.R;
+import com.navinfo.liuba.entity.BaseResponse;
 import com.navinfo.liuba.entity.OrderResponseEntity;
 import com.navinfo.liuba.entity.RegisterUser;
+import com.navinfo.liuba.util.BaseRequestParams;
+import com.navinfo.liuba.util.DefaultHttpUtil;
+import com.navinfo.liuba.util.SystemConstant;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhangdezhi1702 on 2017/9/20.
@@ -66,8 +80,8 @@ public class OrderConfirmAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        OrderResponseEntity order = orderList.get(i);
-        viewHolder.tv_orderId.setText(order.getOrderId()+"");
+        final OrderResponseEntity order = orderList.get(i);
+        viewHolder.tv_orderId.setText(order.getOrderId() + "");
         viewHolder.tv_userName.setText(currentUser.getUserRealName());
         viewHolder.tv_userPhone.setText(currentUser.getUserPhone());
         viewHolder.tv_userAddress.setText(currentUser.getUserAddress());
@@ -77,6 +91,53 @@ public class OrderConfirmAdapter extends BaseAdapter {
         viewHolder.tv_orderTimeLone.setText(order.getAppointDuration());
         viewHolder.tv_orderDistance.setText(order.getAppointScope());
         viewHolder.tv_orderFee.setText(order.getOrderCost() + "");
+
+        //判断当前用户的身份，如果是遛狗师，显示右侧的操作按钮，并且可以通过点击该按钮开始订单
+        if (currentUser.getUserType() == 1) {
+            viewHolder.tv_operate.setText("溜吧");
+            viewHolder.tv_operate.setVisibility(View.VISIBLE);
+            viewHolder.tv_operate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //遛狗师接单，点击后更新当前订单状态
+                    BaseRequestParams updateParams = new BaseRequestParams(SystemConstant.startOrder);
+                    Map updateMap = new HashMap();
+                    updateMap.put("orderId", order.getOrderId());
+                    updateParams.setParamerJson(JSON.toJSONString(updateMap));
+                    DefaultHttpUtil.postMethod(mContext, updateParams, new DefaultHttpUtil.HttpCallback() {
+                        @Override
+                        public void onSuccess(String result) {
+                            if (result != null) {
+                                BaseResponse<String> reponse = JSON.parseObject(result, new TypeReference<BaseResponse<String>>() {
+                                }.getType());
+                                if (reponse.getErrcode() >= 0) {//执行成功，通知界面刷新
+                                    Message msg = new Message();
+                                    msg.what = SystemConstant.EVENT_WHAT_START_TASK;
+                                    msg.arg1 = 1;
+                                    EventBus.getDefault().post(msg);
+                                    BaseToast.makeText(mContext, "开始遛狗!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    BaseToast.makeText(mContext, reponse.getErrmsg(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            viewHolder.tv_operate.setText("密码锁");
+            if (order.getOrderClerkId() != 0) {
+                viewHolder.tv_operate.setVisibility(View.VISIBLE);
+                viewHolder.tv_operate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //直接跳转到密码锁界面
+                        Intent screateIntent = new Intent(mContext, MyScretActivity.class);
+                        mContext.startActivity(screateIntent);
+                    }
+                });
+            }
+        }
 
         return view;
     }

@@ -27,6 +27,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.navinfo.liuba.util.LiuBaApplication;
 import com.navinfo.liuba.util.SystemConstant;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -37,6 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import cn.jpush.im.android.api.JMessageClient;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -136,7 +139,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     .longitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLongitude()).build();
             // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
             mMapView.getMap().setMyLocationData(locData);
-            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.herderJpgPath);
+            //获取当前用户的头像信息
+            File currentUserMarkerFile = new File(SystemConstant.herderJpgDir + ((LiuBaApplication) getApplication()).getCurrentUser().getUserRealName() + ".jpg");
+            BitmapDescriptor mCurrentMarker = null;
+            if (currentUserMarkerFile.exists()) {
+                mCurrentMarker = BitmapDescriptorFactory.fromPath(currentUserMarkerFile.getAbsolutePath());
+            } else {
+                mCurrentMarker = BitmapDescriptorFactory.fromResource(R.mipmap.liuba_icon);
+            }
             MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
             mMapView.getMap().setMyLocationConfiguration(config);
             //设置地图显示比例尺
@@ -314,6 +324,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 upLoadTrack.what = 3;
                 mHandler.handleMessage(upLoadTrack);
                 break;
+            case R.id.tv_main_orderInfo://用户点击我的订单
+                Intent orderListIntent = new Intent(MainActivity.this, MyOrderListActivity.class);
+                startActivity(orderListIntent);
+                break;
         }
 
     }
@@ -378,6 +392,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
+
+        //注销极光IM
+        JMessageClient.logout();
     }
 
     @Override

@@ -1,8 +1,10 @@
 package com.navinfo.liuba;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,11 +33,15 @@ import com.shizhefei.view.indicator.slidebar.ScrollBar;
 import com.shizhefei.view.indicator.transition.OnTransitionTextListener;
 import com.shizhefei.view.viewpager.SViewPager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by zhangdezhi1702 on 2017/9/14.
@@ -91,8 +97,36 @@ public class MyOrderListActivity extends BaseActivity {
         indicatorViewPager.setPageOffscreenLimit(orderTypeTitles.length);
         //获取订单数据
         initData();
+
+        //注册EventBus
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //注销EventBus
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Subscribe
+    public void onEventMainThread(Message msg) {
+        if (msg.what == SystemConstant.EVENT_WHAT_REFRESH_ORDER_LIST) {
+            int arg1 = msg.arg1;//使用arg1获取当前viewpager自动跳转到哪一页
+            String msgStr = (String) msg.obj;//使用obj获取提示信息
+            indicatorViewPager.setCurrentItem(arg1, true);
+            indicatorViewPager.notifyDataSetChanged();
+            //重新获取数据
+            initData();
+        }else if (msg.what==SystemConstant.EVENT_WHAT_START_TASK){
+            //开始遛狗，跳转到主界面
+            Intent mainIntent=new Intent(MyOrderListActivity.this,MainActivity.class);
+        }
+    }
 
     class OrderTypeViewAdapter extends IndicatorViewPager.IndicatorViewPagerAdapter {
         private String[] titles;
@@ -196,9 +230,9 @@ public class MyOrderListActivity extends BaseActivity {
                             finishList.clear();
                             while (iterator.hasNext()) {
                                 OrderResponseEntity orderResponseEntity = iterator.next();
-                                if (orderResponseEntity.getStatus() == 2) {//======================================已确认
+                                if (orderResponseEntity.getStatus() == 2 || orderResponseEntity.getStatus() == 3) {//======================================已确认或进行中
                                     confirmList.add(orderResponseEntity);
-                                } else if (orderResponseEntity.getStatus() == 3) {//======================================已完成
+                                } else if (orderResponseEntity.getStatus() == 4) {//======================================已完成
                                     finishList.add(orderResponseEntity);
                                 }
                             }
