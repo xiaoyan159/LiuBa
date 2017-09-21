@@ -20,6 +20,7 @@ import com.baidu.mapapi.search.sug.SuggestionResult;
 import com.baidu.mapapi.search.sug.SuggestionSearch;
 import com.baidu.mapapi.search.sug.SuggestionSearchOption;
 import com.navinfo.liuba.R;
+import com.navinfo.liuba.location.GeoPoint;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,8 @@ public class AddressSuggestPopup {
 
     private final String NAME = "name";
     private final String ICON = "icon";
-    private final String GEOPOINT = "GEOPOINT";
+    private final String LAT = "LAT";
+    private final String LON = "LON";
     private final String UID = "UID";
 
     private static AddressSuggestPopup instatnce;
@@ -77,7 +79,7 @@ public class AddressSuggestPopup {
         return instatnce;
     }
 
-    public void addSuggestEditText(Context mContext, final EditText edt,final String cityStr) {
+    public void addSuggestEditText(Context mContext, final EditText edt, final String cityStr) {
         if (mContext != null && edt != null) {
             edt_address = edt;
             suggestPopup = new PopupWindow(mContext);
@@ -111,6 +113,10 @@ public class AddressSuggestPopup {
                         edt.setText(addressMapList.get(position).get(NAME).toString());
                         edt.setSelection(edt.getText().length());
                         suggestPopup.dismiss();
+                        if (addressMapList.get(position)!=null&&addressMapList.get(position).get(LON)!=null){
+                            GeoPoint geoPoint = new GeoPoint((Double) addressMapList.get(position).get(LON), (Double) addressMapList.get(position).get(LAT));
+                            edt.setTag(geoPoint);
+                        }
                     }
                 }
             });
@@ -144,7 +150,7 @@ public class AddressSuggestPopup {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    if (s!=null&&s.toString().length()>2){
+                    if (s != null && s.toString().length() > 2) {
                         mSuggestionSearch.requestSuggestion((new SuggestionSearchOption())
                                 .keyword(s.toString())
                                 .city(cityStr));
@@ -162,7 +168,10 @@ public class AddressSuggestPopup {
                     Map<String, Object> map = new HashMap<String, Object>();
                     map.put(NAME, suggestionInfo.key);
                     map.put(ICON, R.mipmap.icon_address_location);
-                    map.put(GEOPOINT, suggestionInfo.pt);
+                    if (suggestionInfo.pt!=null){
+                        map.put(LAT, suggestionInfo.pt.latitude);
+                        map.put(LON, suggestionInfo.pt.longitude);
+                    }
                     map.put(UID, suggestionInfo.uid);
                     map.put("type", 0);
                     listMap.add(map);

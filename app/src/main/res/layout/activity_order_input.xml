@@ -88,8 +88,8 @@
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:hint="@string/hint_reservation_date" />
+                        android:hint="@string/hint_reservation_date"
+                        android:inputType="none" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -123,8 +123,8 @@
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:inputType="none"
-                        android:hint="@string/hint_start_time" />
+                        android:hint="@string/hint_start_time"
+                        android:inputType="none" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -141,13 +141,18 @@
 
                     <Space style="@style/itemSpaceStyle" />
 
-                    <EditText
-                        android:id="@+id/edt_order_input_timeLong"
-                        android:inputType="number"
-                        style="@style/itemEditTextStyle"
+                    <Spinner
+                        android:id="@+id/spn_order_input_timeLong"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_time_long" />
+                        android:hint="@string/hint_time_long"
+                        android:inputType="number" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="小时" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -176,13 +181,17 @@
 
                     <Space style="@style/itemSpaceStyle" />
 
-                    <EditText
-                        android:id="@+id/edt_order_input_distance"
-                        android:inputType="number"
-                        style="@style/itemEditTextStyle"
+                    <Spinner
+                        android:id="@+id/spn_order_input_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_liu_area" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="千米" />
                 </LinearLayout>
 
             </LinearLayout>

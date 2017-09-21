@@ -23,6 +23,10 @@
         <item>公</item>
         <item>母</item>
     </string-array>
+    <string-array name="userType">
+        <item>狗主人</item>
+        <item>遛狗师</item>
+    </string-array>
     <!--松狮\阿拉斯加\比熊\法国斗牛\贵宾犬\哈士奇\金毛\拉布拉多\萨摩耶-->
     <string-array name="kindArray">
         <item>松狮</item>
@@ -35,4 +39,6 @@
         <item>拉布拉多</item>
         <item>萨摩耶</item>
     </string-array>
+
+    <string name="relogin_toast">尚未登录，请登录!</string>
 </resources>
