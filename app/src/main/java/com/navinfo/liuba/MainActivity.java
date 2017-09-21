@@ -1,6 +1,7 @@
 package com.navinfo.liuba;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +25,11 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.Polyline;
+import com.baidu.mapapi.map.PolylineOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.navinfo.liuba.util.LiuBaApplication;
 import com.navinfo.liuba.util.SystemConstant;
 
@@ -37,9 +43,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static android.R.attr.handle;
-import static android.R.attr.tag;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -79,16 +82,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private List<HashMap<String, Object>> trackList;
     private LiuBaApplication liuBaApplication;
     private Timer timer;
+    OverlayOptions ooPolyline;
+    List<LatLng> points;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mView = View.inflate(MainActivity.this, R.layout.activity_main, null);
         setContentView(mView);
+
+        ooPolyline = new PolylineOptions();
+        points = new ArrayList<>();
+
         mImgUserCenter = (ImageView) mView.findViewById(R.id.user_center);
         mImgGps = (ImageView) mView.findViewById(R.id.gps_location);
         btnWalk = mView.findViewById(R.id.walk_the_dog);
         btnAppoint = mView.findViewById(R.id.make_an_appointment);
+
         mImgUserCenter.setOnClickListener(this);
         mImgGps.setOnClickListener(this);
         btnWalk.setOnClickListener(this);
@@ -170,14 +181,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         // TODO Auto-generated method stub
                         HashMap<String, Object> hashMap = new HashMap();
                         BDLocation currentLocation = liuBaApplication.getCurrentLocation();
-                        hashMap.put("geometry", createGeometryPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
-                        hashMap.put("isShit", ifShit);
-                        hashMap.put("isPee", ifPee);
-                        trackList.add(hashMap);
-                        ifShit = 0;
-                        ifPee = 0;
+                        if (currentLocation.getLongitude() == currentLocation.getLatitude() && currentLocation.getLatitude() == 4.9e-324) {
+                            Toast.makeText(MainActivity.this, "定位失败！", Toast.LENGTH_LONG).show();
+                        } else {
+                            hashMap.put("geometry", createGeometryPoint(currentLocation.getLongitude(), currentLocation.getLatitude()));
+                            hashMap.put("isShit", ifShit);
+                            hashMap.put("isPee", ifPee);
+                            trackList.add(hashMap);
+                            ifShit = 0;
+                            ifPee = 0;
+                            //地图绘制图形
+                            // 构造折线点坐标
+                            points.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLocationWhere()));
+                            if (points != null && points.size() > 1) {
+                                double totalMiles = getTotalMiles(points);
+//                                mTvMile.setText(totalMiles + "m");
+                                drawTrackLine(points);
+                            }
+                        }
                     }
-
                 }, 1000, 1000);//1秒之后，每隔2秒做一次run()操作
             }
             if (msg.what == 1) {
@@ -216,6 +238,32 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
     };
+
+    /**
+     * 绘制轨迹
+     * * @param pointsList
+     */
+    public void drawTrackLine(List<LatLng> pointsList) {
+        mMapView.getMap().clear();
+        OverlayOptions ooPolyline = new PolylineOptions().width(10).points(pointsList).color(Integer.valueOf(Color.RED));
+        //添加在地图中
+        mMapView.getMap().addOverlay(ooPolyline);
+    }
+
+    /**
+     * 计算路径
+     *
+     * @param pointsList
+     * @return
+     */
+    public double getTotalMiles(List<LatLng> pointsList) {
+        double totalDiatance = 0;
+        for (int i = 1; i < pointsList.size(); i++) {
+            double distance = DistanceUtil.getDistance(pointsList.get(i - 1), pointsList.get(i));
+            totalDiatance = totalDiatance + distance;
+        }
+        return totalDiatance;
+    }
 
     public String createGeometryPoint(double lattitude, double longtitude) {
         return "POINT(" + lattitude + " " + longtitude + ")";
