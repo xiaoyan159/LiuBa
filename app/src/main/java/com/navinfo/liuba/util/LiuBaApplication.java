@@ -14,6 +14,8 @@ import com.baidu.mapapi.SDKInitializer;
 import com.litesuits.android.log.Log;
 import com.navinfo.liuba.BuildConfig;
 import com.navinfo.liuba.entity.RegisterUser;
+import com.navinfo.liuba.location.GeoPoint;
+import com.navinfo.liuba.location.GeometryTools;
 import com.navinfo.liuba.location.MyLocationListener;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -151,5 +153,21 @@ public class LiuBaApplication extends Application {
 
     public void setCurrentUser(RegisterUser currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public GeoPoint getCurrentGeoPoint() {
+        BDLocation bdLocation = getCurrentLocation();
+        if (bdLocation != null) {
+            return new GeoPoint(bdLocation.getLongitude(), bdLocation.getLatitude());
+        }
+        return null;
+    }
+
+    public String getCurrentGeometry(){
+        GeoPoint geoPoint=getCurrentGeoPoint();
+        if (geoPoint!=null){
+            return GeometryTools.createGeometry(geoPoint).toString();
+        }
+        return null;
     }
 }

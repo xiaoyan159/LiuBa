@@ -56,5 +56,6 @@ dependencies {
     compile files('libs/jmessage-android_v2.2.1.jar')
     compile files('libs/IndoorscapeAlbumPlugin.jar')
     compile files('libs/fastjson-1.1.43.android.jar')
+    compile files('libs/jts-1.13.jar')
 }
 

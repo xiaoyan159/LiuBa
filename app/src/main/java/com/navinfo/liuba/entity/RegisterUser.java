@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 public class RegisterUser implements Serializable {
     /**
+     * userId:23
      * userRealName : 张三
      * userNickName : 小三
      * userPassword : 123456
@@ -20,7 +21,7 @@ public class RegisterUser implements Serializable {
      * petBreed : 藏獒
      * petHabit : 吃饭不擦嘴
      */
-    private int id;
+    private int userId;
     private String userRealName;
     private String userNickName;
     private String userPassword;
@@ -34,12 +35,12 @@ public class RegisterUser implements Serializable {
     private String petHabit;
     private String location;
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUserRealName() {

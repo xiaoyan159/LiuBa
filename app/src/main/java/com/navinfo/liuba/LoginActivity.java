@@ -103,9 +103,13 @@ public class LoginActivity extends BaseActivity {
                             if (reponse.getErrcode() >= 0) {//访问成功，服务返回所需结果
                                 RegisterUser registerUser = reponse.getData();
                                 if (registerUser != null) {
-                                    if (edt_phone.getText().toString().equals(registerUser.getUserPhone())) {//登录成功，自动跳转到主界面
+                                    if (edt_userName.getText().toString().equals(registerUser.getUserRealName())) {//登录成功，自动跳转到主界面
                                         //登录成功后自动缓存当前用户的信息
                                         ((LiuBaApplication) getApplication()).setCurrentUser(registerUser);
+                                        //在配置文件中记录最后一次用户的登录名
+                                        if (spf_config!=null){
+                                            spf_config.edit().putString(SystemConstant.CONFIG_SPF_USERNAME,edt_userName.getText().toString()).commit();
+                                        }
                                         BaseToast.makeText(LoginActivity.this, "登录成功!", Toast.LENGTH_SHORT).show();
                                         Intent successIntent = new Intent(LoginActivity.this, MainActivity.class);
                                         startActivity(successIntent);
@@ -157,7 +161,7 @@ public class LoginActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 //用户注册成功返回
                 if (data != null) {
-                    RegisterUser registerUser = (RegisterUser) data.getExtras().getSerializable(RegisterUser.class.getName());
+                    RegisterUser registerUser= (RegisterUser) data.getSerializableExtra(SystemConstant.BUNDLE_USER_INFO);
                     if (registerUser != null && !Check.isEmpty(registerUser.getUserRealName())) {
                         edt_userName.setText(registerUser.getUserRealName());
                         if (!Check.isEmpty(registerUser.getUserPhone())) {
