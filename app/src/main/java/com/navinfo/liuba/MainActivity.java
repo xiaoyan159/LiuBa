@@ -205,13 +205,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             // 构造折线点坐标
                             points.add(new LatLng(currentLocation.getLongitude(), currentLocation.getLatitude()));
                             if (points != null && points.size() > 1) {
-                                double totalMiles = getTotalMiles(points);
-//                                mTvMile.setText(totalMiles + "m");
+                                int totalMiles = (int) Math.round(getTotalMiles(points));
+                                Message msg = new Message();
+                                msg.what = 4;
+                                msg.obj = totalMiles;
+                                mHandler.sendMessage(msg);
                                 drawTrackLine(points);
                             }
                         }
                     }
                 }, 1000, 1000);//1秒之后，每隔2秒做一次run()操作
+            }
+            if (msg.what == 4) {
+                int mile = (int) msg.obj;
+                mTvMile.setText(mile + "m");
             }
             if (msg.what == 1) {
                 timer.cancel();
