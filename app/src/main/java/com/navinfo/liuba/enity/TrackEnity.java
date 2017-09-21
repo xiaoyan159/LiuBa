@@ -1,5 +1,7 @@
 package com.navinfo.liuba.enity;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 /**
  * @author CC
  * @version V1.0
@@ -10,6 +12,15 @@ public class TrackEnity {
     private int isShit;
     private int isPee;
     private String geometry;
+    private int orderId = -1;
+
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
 
     public int getIsShit() {
         return isShit;
