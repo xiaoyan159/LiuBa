@@ -109,7 +109,9 @@ public class OrderFinishAdapter extends BaseAdapter {
                             if (reponse.getErrcode() >= 0) {//执行成功，跳转到主界面查看轨迹
                                 ArrayList<OrderTrackEntity> orderTrackEntityList = reponse.getData();
                                 if (orderTrackEntityList != null && !orderTrackEntityList.isEmpty()) {
-                                    Intent mainIntent=new Intent(mContext, MainActivity.class);
+                                    Intent mainIntent = new Intent(mContext, MainActivity.class);
+                                    mainIntent.putExtra(SystemConstant.BUNDLE_ORDER_INFO, order);
+                                    mainIntent.putExtra(SystemConstant.BUNDLE_TRACK_LIST, orderTrackEntityList);
                                     mContext.startActivity(mainIntent);
                                 } else {
                                     BaseToast.makeText(mContext, "这个订单没有轨迹呢...", Toast.LENGTH_SHORT).show();

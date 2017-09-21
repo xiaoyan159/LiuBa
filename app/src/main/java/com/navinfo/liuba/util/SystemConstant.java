@@ -17,6 +17,7 @@ public class SystemConstant {
     private static final String BASE_URL = "http://192.168.4.110:8199/liuba/";
     public static final String queryByPhone = BASE_URL + "/userInfo/queryByPhone/";//根据电话查询用户信息
     public static final String userInfoCreate = BASE_URL + "/userInfo/create/";//创建用户
+    public static final String trackCreate = BASE_URL + "/trackPoint/create/";//新建轨迹
     public static final String oederCreate = BASE_URL + "/orderInfo/create/";//创建订单
     public static final String oederListByStatus = BASE_URL + "/orderInfo/listByStatus/";//根据订单状态查询订单数据
     public static final String oederListByUser = BASE_URL + "/orderInfo/listByUserIdOrOrderClerkId/";//根据客户id或者接单人id查询订单接口
@@ -28,6 +29,7 @@ public class SystemConstant {
     //intent中bundle对应的key
     public static final String BUNDLE_USER_INFO = "BUNDLE_USER_INFO";
     public static final String BUNDLE_ORDER_INFO = "BUNDLE_ORDER_INFO";
+    public static final String BUNDLE_TRACK_LIST = "BUNDLE_TRACK_LIST";
 
     //EventBus的what值
     public static final int EVENT_WHAT_REFRESH_ORDER_LIST = 0x201;
