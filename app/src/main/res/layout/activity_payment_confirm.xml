@@ -11,55 +11,61 @@
         layout="@layout/layer_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        ></include>
+        android:layout_alignParentTop="true"></include>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:orientation="vertical">
+
         <TextView
-            android:paddingLeft="@dimen/fab_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorFontPrimaryDark"
             android:layout_marginBottom="@dimen/fab_margin"
-            android:text="@string/pay_success_tips"/>
+            android:paddingLeft="@dimen/fab_margin"
+            android:text="@string/pay_success_tips"
+            android:textColor="@color/colorFontPrimaryDark" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <RelativeLayout
                 android:id="@+id/layer_my_order_list"
+                style="@style/bottomLayerStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                style="@style/bottomLayerStyle">
+                android:orientation="horizontal">
+
                 <TextView
-                    android:layout_centerInParent="true"
+                    style="@style/bottomTextBgStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/order"
-                    style="@style/bottomTextBgStyle"/>
+                    android:layout_centerInParent="true"
+                    android:text="@string/order" />
             </RelativeLayout>
+
             <Space
                 android:layout_width="1dp"
                 android:layout_height="wrap_content" />
+
             <RelativeLayout
+                android:id="@+id/layer_my_order_confirm"
+                style="@style/bottomLayerStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                style="@style/bottomLayerStyle">
+                android:orientation="horizontal">
+
                 <TextView
-                    android:layout_centerInParent="true"
+                    style="@style/bottomTextBgStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/title_confirm"
-                    style="@style/bottomTextBgStyle"/>
+                    android:layout_centerInParent="true"
+                    android:text="@string/title_confirm" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
@@ -67,10 +73,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="支付成功"
         android:layout_below="@id/layer_payment_confirm_title"
-        android:paddingTop="@dimen/fab_margin"
-        android:textColor="@color/colorFontPrimaryDark"
         android:gravity="center"
-        android:textSize="@dimen/payment_success"/>
+        android:paddingTop="@dimen/fab_margin"
+        android:text="支付成功"
+        android:textColor="@color/colorFontPrimaryDark"
+        android:textSize="@dimen/payment_success" />
 </RelativeLayout>

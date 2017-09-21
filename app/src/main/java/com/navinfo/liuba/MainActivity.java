@@ -47,7 +47,6 @@ import java.util.TimerTask;
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mImgUserCenter;
-    private ImageView mImgGps;
     private View btnWalk;
     private View btnAppoint;
     private View mView;
@@ -96,12 +95,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         points = new ArrayList<>();
 
         mImgUserCenter = (ImageView) mView.findViewById(R.id.user_center);
-        mImgGps = (ImageView) mView.findViewById(R.id.gps_location);
         btnWalk = mView.findViewById(R.id.walk_the_dog);
         btnAppoint = mView.findViewById(R.id.make_an_appointment);
 
         mImgUserCenter.setOnClickListener(this);
-        mImgGps.setOnClickListener(this);
         btnWalk.setOnClickListener(this);
         btnAppoint.setOnClickListener(this);
 
@@ -153,7 +150,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     .longitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLongitude()).build();
             // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
             mMapView.getMap().setMyLocationData(locData);
-            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.rootPath + SystemConstant.herderJpgPath);
+            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.herderJpgPath);
             MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
             mMapView.getMap().setMyLocationConfiguration(config);
             //设置地图显示比例尺
@@ -279,9 +276,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     layer_user_menu.setVisibility(View.VISIBLE);
                 }
-                break;
-            case R.id.gps_location:
-
                 break;
             case R.id.walk_the_dog:
                 mLinearWalkAppoint.setVisibility(View.GONE);

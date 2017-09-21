@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <include
         android:id="@+id/layer_order_confirm_title"
@@ -83,6 +83,7 @@
                     <Space style="@style/itemSpaceStyle" />
 
                     <EditText
+                        android:id="@+id/edt_order_confirm_name"
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -105,6 +106,7 @@
                     <Space style="@style/itemSpaceStyle" />
 
                     <EditText
+                        android:id="@+id/edt_order_confirm_phone"
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -127,6 +129,7 @@
                     <Space style="@style/itemSpaceStyle" />
 
                     <EditText
+                        android:id="@+id/edt_order_confirm_address"
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -136,6 +139,7 @@
                     <Space style="@style/itemSpaceStyle" />
 
                     <TextView
+                        android:id="@+id/tv_order_confirm_edtAddress"
                         style="@style/button4CornerStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -161,9 +165,11 @@
                     android:orientation="horizontal">
 
                     <EditText
+                        android:id="@+id/edt_order_confirm_orderInfo"
                         style="@style/itemEditTextStyle"
                         android:layout_width="200dp"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:lines="4" />
                 </LinearLayout>
 
@@ -182,9 +188,11 @@
                     <Space style="@style/itemSpaceStyle" />
 
                     <EditText
+                        android:id="@+id/edt_order_confirm_feeTotal"
                         style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:enabled="false"
                         android:hint="@string/hint_fee_total" />
                 </LinearLayout>
             </LinearLayout>
