@@ -141,17 +141,20 @@
 
                     <Space style="@style/itemSpaceStyle" />
 
-                    <Spinner
-                        android:id="@+id/spn_order_input_timeLong"
+
+                    <TextView
+                        android:id="@+id/edt_order_input_timeLong"
+                        style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_time_long"
-                        android:inputType="number" />
+                        android:inputType="none" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/item_padding_horzontal"
                         android:text="小时" />
                 </LinearLayout>
             </LinearLayout>
@@ -181,15 +184,18 @@
 
                     <Space style="@style/itemSpaceStyle" />
 
-                    <Spinner
-                        android:id="@+id/spn_order_input_distance"
+                    <TextView
+                        android:id="@+id/edt_order_input_distance"
+                        style="@style/itemEditTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_liu_area" />
+                        android:hint="@string/hint_time_long"
+                        android:inputType="none" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/item_padding_horzontal"
                         android:layout_gravity="center"
                         android:text="千米" />
                 </LinearLayout>

@@ -66,7 +66,7 @@
                     style="@style/subTitleStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="用户信息" />
+                    android:text="联系信息" />
 
                 <LinearLayout
                     style="@style/itemLayerStyle"
@@ -78,7 +78,7 @@
                         style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="用户姓名" />
+                        android:text="姓名" />
 
                     <Space style="@style/itemSpaceStyle" />
 
@@ -101,7 +101,7 @@
                         style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="用户手机" />
+                        android:text="手机" />
 
                     <Space style="@style/itemSpaceStyle" />
 
@@ -114,37 +114,50 @@
                         android:hint="@string/hint_user_phone" />
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/itemLayerStyle"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        style="@style/itemTvStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="用户地址" />
-
-                    <Space style="@style/itemSpaceStyle" />
-
-                    <EditText
-                        android:id="@+id/edt_order_confirm_address"
-                        style="@style/itemEditTextStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:enabled="false"
-                        android:hint="@string/hint_user_address" />
-
-                    <Space style="@style/itemSpaceStyle" />
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/tv_order_confirm_edtAddress"
                         style="@style/button4CornerStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="right"
+                        android:layout_marginBottom="@dimen/item_padding_vertical"
+                        android:layout_marginLeft="@dimen/item_padding_horzontal"
                         android:text="@string/edit_text" />
-                </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/itemLayerStyle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/tv_order_confirm_edtAddress"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/itemTvStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="地址" />
+
+                        <Space style="@style/itemSpaceStyle" />
+
+                        <EditText
+                            android:id="@+id/edt_order_confirm_address"
+                            style="@style/itemEditTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="@string/hint_user_address" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -193,6 +206,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:enabled="false"
+                        android:textSize="@dimen/title_font_size"
+                        android:textStyle="bold"
                         android:hint="@string/hint_fee_total" />
                 </LinearLayout>
             </LinearLayout>

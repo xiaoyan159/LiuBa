@@ -12,6 +12,8 @@ public class SystemConstant {
     public static final String CONFIG_SPF = "CONFIG_SPF";//常规设置的sharedpreference文件名
     public static final String CONFIG_SPF_USERNAME = "CONFIG_SPF_USERNAME";//常规设置的sharedpreference文件中记录的上次登录的用户名
     public static final int CURRENT_LOCATION = 0x101;//用来记录当前位置的键
+    public static final int RETURN_FROM_MAIN = 0x102;
+    public static final int LOGIN_2_MAIN = 0x103;
 
     //配置URL
     private static final String BASE_URL = "http://192.168.4.110:8199/liuba/";
@@ -24,24 +26,26 @@ public class SystemConstant {
     public static final String acceptOrder = BASE_URL + "/orderInfo/updateOrderStatus/";//遛狗师接单的接口
     public static final String startOrder = BASE_URL + "/orderInfo/updateOrderStatusByOrderId/";//遛狗师接单的接口
     public static final String orderTrackList = BASE_URL + "/trackPoint/listByOrderId/";//根据订单id查询轨迹点接口
+    public static final String finishOrder = BASE_URL + "/orderInfo/finish/";//订单完成接口
 
 
     //intent中bundle对应的key
     public static final String BUNDLE_USER_INFO = "BUNDLE_USER_INFO";
     public static final String BUNDLE_ORDER_INFO = "BUNDLE_ORDER_INFO";
     public static final String BUNDLE_TRACK_LIST = "BUNDLE_TRACK_LIST";
+    public static final String ORDER_ACTION = "ORDER_ACTION";
 
     //EventBus的what值
     public static final int EVENT_WHAT_REFRESH_ORDER_LIST = 0x201;
     public static final int EVENT_WHAT_START_TASK = 0x202;
 
     public static String getJPushUserName(String userId) {
-        String jPushUserName=IMESSAGE_USER_PREFIX + userId;
+        String jPushUserName = IMESSAGE_USER_PREFIX + userId;
         return jPushUserName;
     }
 
     public static String getJPushPWD(String userId) {
-        String jPushUserName=IMESSAGE_USER_PREFIX + userId;
+        String jPushUserName = IMESSAGE_USER_PREFIX + userId;
         return jPushUserName;
     }
 }

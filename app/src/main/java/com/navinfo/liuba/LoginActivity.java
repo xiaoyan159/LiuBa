@@ -115,13 +115,13 @@ public class LoginActivity extends BaseActivity {
                                         }
 
                                         //用户登录成功，尝试向极光服务同时注册该用户，以便可以接收到其他用户通知的消息
-                                        JMessageClient.register(SystemConstant.getJPushUserName(registerUser.getUserId()+""), SystemConstant.getJPushPWD(registerUser.getUserId()+""), new BasicCallback() {
+                                        JMessageClient.register(SystemConstant.getJPushUserName(registerUser.getUserId() + ""), SystemConstant.getJPushPWD(registerUser.getUserId() + ""), new BasicCallback() {
                                             @Override
                                             public void gotResult(int i, String s) {
-                                                //获取注册的结果
-                                                BaseToast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
+//                                                //获取注册的结果
+//                                                BaseToast.makeText(LoginActivity.this, s, Toast.LENGTH_SHORT).show();
                                                 //不管结果如何，都使用当前用户id和手机号去登录
-                                                JMessageClient.login(SystemConstant.getJPushUserName(registerUser.getUserId()+"") + "", SystemConstant.getJPushPWD(registerUser.getUserId()+""), new BasicCallback() {
+                                                JMessageClient.login(SystemConstant.getJPushUserName(registerUser.getUserId() + ""), SystemConstant.getJPushPWD(registerUser.getUserId() + ""), new BasicCallback() {
                                                     @Override
                                                     public void gotResult(int i, String s) {
                                                         //获取登录的结果
@@ -133,7 +133,7 @@ public class LoginActivity extends BaseActivity {
 
                                         BaseToast.makeText(LoginActivity.this, "登录成功!", Toast.LENGTH_SHORT).show();
                                         Intent successIntent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(successIntent);
+                                        startActivityForResult(successIntent, SystemConstant.LOGIN_2_MAIN);
                                     } else {//用户名与手机号不匹配
                                         BaseToast.makeText(LoginActivity.this, "用户名与手机号不匹配，请检查后重试...", Toast.LENGTH_SHORT).show();
                                     }
@@ -191,7 +191,7 @@ public class LoginActivity extends BaseActivity {
                     }
                 }
             }
-        } else if (requestCode == 0x102) {
+        } else if (requestCode == SystemConstant.LOGIN_2_MAIN) {
             LoginActivity.this.finish();
         }
     }

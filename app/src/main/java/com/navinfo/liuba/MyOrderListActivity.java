@@ -200,51 +200,57 @@ public class MyOrderListActivity extends BaseActivity {
                     }
                 }
             }
+
+            @Override
+            public void onFinished() {
+                super.onFinished();
+                //获取当前用户所有的相关订单
+                BaseRequestParams userOrderParams = new BaseRequestParams(SystemConstant.oederListByUser);
+                if (currentUser != null) {
+                    Map userOrderMap = new HashMap();
+                    if (currentUser.getUserType() == 0) {//宠物主人
+                        userOrderMap.put("userId", currentUser.getUserId());
+                        userOrderMap.put("orderClerkId", 0);
+                    } else {//遛狗师
+                        userOrderMap.put("orderClerkId", currentUser.getUserId());
+                        userOrderMap.put("userId", 0);
+                    }
+                    userOrderParams.setParamerJson(JSON.toJSONString(userOrderMap));
+                }
+                DefaultHttpUtil.postMethod(MyOrderListActivity.this, userOrderParams, new DefaultHttpUtil.HttpCallback() {
+                    @Override
+                    public void onSuccess(String result) {
+                        if (result != null) {
+                            BaseResponse<List<OrderResponseEntity>> response = JSON.parseObject(result, new TypeReference<BaseResponse<List<OrderResponseEntity>>>() {
+                            }.getType());
+                            if (response.getErrcode() >= 0) {//请求并执行成功
+                                //循环遍历与当前用户相关的订单
+                                List<OrderResponseEntity> orderResponseEntityList = response.getData();
+                                if (orderResponseEntityList != null && !orderResponseEntityList.isEmpty()) {
+                                    Iterator<OrderResponseEntity> iterator = orderResponseEntityList.iterator();
+                                    confirmList.clear();
+                                    finishList.clear();
+                                    while (iterator.hasNext()) {
+                                        OrderResponseEntity orderResponseEntity = iterator.next();
+                                        if (orderResponseEntity.getStatus() == 2 || orderResponseEntity.getStatus() == 3) {//======================================已确认或进行中
+                                            confirmList.add(orderResponseEntity);
+                                        } else if (orderResponseEntity.getStatus() == 4) {//======================================已完成
+                                            finishList.add(orderResponseEntity);
+                                        }
+                                    }
+                                    confirmAdapter.notifyDataSetChanged();
+                                    finishAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                BaseToast.makeText(MyOrderListActivity.this, "出错了，要不再点下试试...", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+            }
         });
 
-        //获取当前用户所有的相关订单
-        BaseRequestParams userOrderParams = new BaseRequestParams(SystemConstant.oederListByUser);
-        if (currentUser != null) {
-            Map userOrderMap = new HashMap();
-            if (currentUser.getUserType() == 0) {//宠物主人
-                userOrderMap.put("userId", currentUser.getUserId());
-                userOrderMap.put("orderClerkId", 0);
-            } else {//遛狗师
-                userOrderMap.put("orderClerkId", currentUser.getUserId());
-                userOrderMap.put("userId", 0);
-            }
-            userOrderParams.setParamerJson(JSON.toJSONString(userOrderMap));
-        }
-        DefaultHttpUtil.postMethod(MyOrderListActivity.this, userOrderParams, new DefaultHttpUtil.HttpCallback() {
-            @Override
-            public void onSuccess(String result) {
-                if (result != null) {
-                    BaseResponse<List<OrderResponseEntity>> response = JSON.parseObject(result, new TypeReference<BaseResponse<List<OrderResponseEntity>>>() {
-                    }.getType());
-                    if (response.getErrcode() >= 0) {//请求并执行成功
-                        //循环遍历与当前用户相关的订单
-                        List<OrderResponseEntity> orderResponseEntityList = response.getData();
-                        if (orderResponseEntityList != null && !orderResponseEntityList.isEmpty()) {
-                            Iterator<OrderResponseEntity> iterator = orderResponseEntityList.iterator();
-                            confirmList.clear();
-                            finishList.clear();
-                            while (iterator.hasNext()) {
-                                OrderResponseEntity orderResponseEntity = iterator.next();
-                                if (orderResponseEntity.getStatus() == 2 || orderResponseEntity.getStatus() == 3) {//======================================已确认或进行中
-                                    confirmList.add(orderResponseEntity);
-                                } else if (orderResponseEntity.getStatus() == 4) {//======================================已完成
-                                    finishList.add(orderResponseEntity);
-                                }
-                            }
-                            confirmAdapter.notifyDataSetChanged();
-                            finishAdapter.notifyDataSetChanged();
-                        }
-                    } else {
-                        BaseToast.makeText(MyOrderListActivity.this, "出错了，要不再点下试试...", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-        });
+
     }
 
 

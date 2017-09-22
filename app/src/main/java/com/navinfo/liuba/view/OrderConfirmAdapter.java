@@ -2,7 +2,6 @@ package com.navinfo.liuba.view;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.navinfo.liuba.MainActivity;
 import com.navinfo.liuba.MyScretActivity;
 import com.navinfo.liuba.R;
 import com.navinfo.liuba.entity.BaseResponse;
@@ -21,11 +21,11 @@ import com.navinfo.liuba.util.BaseRequestParams;
 import com.navinfo.liuba.util.DefaultHttpUtil;
 import com.navinfo.liuba.util.SystemConstant;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 
 /**
  * Created by zhangdezhi1702 on 2017/9/20.
@@ -111,11 +111,11 @@ public class OrderConfirmAdapter extends BaseAdapter {
                                 BaseResponse<String> reponse = JSON.parseObject(result, new TypeReference<BaseResponse<String>>() {
                                 }.getType());
                                 if (reponse.getErrcode() >= 0) {//执行成功，通知界面刷新
-                                    Message msg = new Message();
-                                    msg.what = SystemConstant.EVENT_WHAT_START_TASK;
-                                    msg.arg1 = 1;
-                                    EventBus.getDefault().post(msg);
-                                    BaseToast.makeText(mContext, "开始遛狗!", Toast.LENGTH_SHORT).show();
+                                    Intent startIntent = new Intent(mContext, MainActivity.class);
+                                    startIntent.setFlags(FLAG_ACTIVITY_CLEAR_TOP);
+                                    startIntent.putExtra(SystemConstant.BUNDLE_ORDER_INFO,order);
+                                    startIntent.putExtra(SystemConstant.ORDER_ACTION, 1);
+                                    mContext.startActivity(startIntent);
                                 } else {
                                     BaseToast.makeText(mContext, reponse.getErrmsg(), Toast.LENGTH_SHORT).show();
                                 }

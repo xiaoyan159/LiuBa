@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
+
 
 /**
  * Created by zhangdezhi1702 on 2017/9/20.
@@ -112,6 +114,8 @@ public class OrderFinishAdapter extends BaseAdapter {
                                     Intent mainIntent = new Intent(mContext, MainActivity.class);
                                     mainIntent.putExtra(SystemConstant.BUNDLE_ORDER_INFO, order);
                                     mainIntent.putExtra(SystemConstant.BUNDLE_TRACK_LIST, orderTrackEntityList);
+                                    mainIntent.setFlags(FLAG_ACTIVITY_CLEAR_TOP);
+                                    mainIntent.putExtra(SystemConstant.ORDER_ACTION, 2);
                                     mContext.startActivity(mainIntent);
                                 } else {
                                     BaseToast.makeText(mContext, "这个订单没有轨迹呢...", Toast.LENGTH_SHORT).show();

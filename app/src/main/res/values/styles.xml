@@ -46,6 +46,7 @@
     <style name="itemEditTextStyle" parent="android:Widget.Holo.TextView">
         <item name="android:background">@drawable/shape_edt_bg_4_corner</item>
         <item name="android:textSize">@dimen/default_font_size</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
     <!--底部按钮的背景style-->
     <style name="bottomLayerStyle" >
