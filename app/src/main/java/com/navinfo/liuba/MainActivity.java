@@ -26,6 +26,7 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
@@ -83,17 +84,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean tagPee = false;
 
     private View layer_user_menu;//用户菜单的布局，点击左上角按钮显示
-    private TextView tv_userChange,tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
+    private TextView tv_userChange, tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
 
     //百度地图组件
     private MapView mMapView = null;
 
-    //    private long pauseString;//暂停时字符串
     private List<TrackEnity> trackList;
     private LiuBaApplication liuBaApplication;
     private Timer timer;
-    OverlayOptions ooPolyline;
-    List<LatLng> points;
 
     private OrderResponseEntity currentOrderInfo = null;
     private List<OrderTrackEntity> orderTrackEntityList = null;
@@ -104,9 +102,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         mView = View.inflate(MainActivity.this, R.layout.activity_main, null);
         setContentView(mView);
-
-        ooPolyline = new PolylineOptions();
-        points = new ArrayList<>();
 
         mImgUserCenter = (ImageView) mView.findViewById(R.id.user_center);
         btnWalk = mView.findViewById(R.id.walk_the_dog);
@@ -257,7 +252,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             Toast.makeText(MainActivity.this, "定位失败！", Toast.LENGTH_LONG).show();
                         } else {
                             TrackEnity trackEnity = new TrackEnity();
-                            GeoPoint geopoint = new GeoPoint(currentLocation.getLongitude(), currentLocation.getLatitude());
+                            GeoPoint geopoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
                             trackEnity.setGeometry(GeometryTools.createGeometry(geopoint).toString());
                             trackEnity.setIsPee(ifPee);
                             trackEnity.setIsShit(ifShit);
@@ -265,18 +260,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 trackEnity.setOrderId(currentOrderInfo.getOrderId());
                             }
                             trackList.add(trackEnity);
+                            //重置状态
                             ifShit = 0;
                             ifPee = 0;
                             //地图绘制图形
                             // 构造折线点坐标
-                            points.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                            if (points != null && points.size() > 1) {
-                                int totalMiles = (int) Math.round(getTotalMiles(points));
-                                Message msg = new Message();
-                                msg.what = 4;
-                                msg.obj = totalMiles;
-                                mHandler.sendMessage(msg);
-                                drawTrackLine(points);
+                            if (trackList != null && trackList.size() > 1) {
+                                drawTrackLine(trackList);
                             }
                         }
                     }
@@ -361,12 +351,51 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 绘制轨迹
      * * @param pointsList
      */
-    public void drawTrackLine(List<LatLng> pointsList) {
+    public void drawTrackLine(List<TrackEnity> enityList) {
         mMapView.getMap().clear();
+        List<LatLng> pointsList = new ArrayList<>();
+        for (int i = 0; i < enityList.size(); i++) {
+            TrackEnity enity = enityList.get(i);
+            GeoPoint geoPoint = GeometryTools.createGeoPoint(enity.getGeometry());
+            pointsList.add(new LatLng(geoPoint.getLat(), geoPoint.getLon()));
+            if (enity.getIsPee() == 1) {
+                //定义Maker坐标点
+                LatLng point = new LatLng(geoPoint.getLat(), geoPoint.getLon());
+                //构建Marker图标
+                BitmapDescriptor bitmap = BitmapDescriptorFactory
+                        .fromResource(R.mipmap.icon_pee);
+                //构建MarkerOption，用于在地图上添加Marker
+                OverlayOptions option = new MarkerOptions()
+                        .position(point)
+                        .icon(bitmap);
+                //在地图上添加Marker，并显示
+                mMapView.getMap().addOverlay(option);
+            }
+            if (enity.getIsShit() == 1) {
+                //定义Maker坐标点
+                LatLng point = new LatLng(geoPoint.getLat(), geoPoint.getLon());
+                //构建Marker图标
+                BitmapDescriptor bitmap = BitmapDescriptorFactory
+                        .fromResource(R.mipmap.icon_shit);
+                //构建MarkerOption，用于在地图上添加Marker
+                OverlayOptions option = new MarkerOptions()
+                        .position(point)
+                        .icon(bitmap);
+                //在地图上添加Marker，并显示
+                mMapView.getMap().addOverlay(option);
+            }
+        }
         OverlayOptions ooPolyline = new PolylineOptions().width(10).points(pointsList).color(getResources().getColor(R.color.colortrackline));
         //添加在地图中
         mMapView.getMap().addOverlay(ooPolyline);
+        //更新里程数
+        int totalMiles = (int) Math.round(getTotalMiles(pointsList));
+        Message msg = new Message();
+        msg.what = 4;
+        msg.obj = totalMiles;
+        mHandler.sendMessage(msg);
     }
+
 
     /**
      * 计算路径
@@ -507,7 +536,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 BaseToast.makeText(MainActivity.this, "即将上线...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_main_changeUser://用户点击退出程序
-                Intent changeUserIntent=new Intent(MainActivity.this,RegisterActivity.class);
+                Intent changeUserIntent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(changeUserIntent);
                 MainActivity.this.finish();
                 break;
