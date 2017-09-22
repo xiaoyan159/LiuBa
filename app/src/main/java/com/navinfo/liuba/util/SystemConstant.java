@@ -14,6 +14,7 @@ public class SystemConstant {
     public static final int CURRENT_LOCATION = 0x101;//用来记录当前位置的键
     public static final int RETURN_FROM_MAIN = 0x102;
     public static final int LOGIN_2_MAIN = 0x103;
+    public static final int MAIN_2_REGISTER = 0x104;
 
     //配置URL
     private static final String BASE_URL = "http://192.168.4.110:8199/liuba/";

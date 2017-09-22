@@ -47,6 +47,7 @@ public class LoginActivity extends BaseActivity {
     private ImageView img_header;
 
     private SharedPreferences spf_config;
+    boolean isQuiteTrue = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +193,11 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         } else if (requestCode == SystemConstant.LOGIN_2_MAIN) {
-            LoginActivity.this.finish();
+            if (data != null) {
+                intentToRegister();
+            } else {
+                LoginActivity.this.finish();
+            }
         }
     }
 

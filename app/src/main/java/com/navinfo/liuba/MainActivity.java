@@ -83,7 +83,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean tagPee = false;
 
     private View layer_user_menu;//用户菜单的布局，点击左上角按钮显示
-    private TextView tv_userChange,tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
+    private TextView tv_userChange, tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
 
     //百度地图组件
     private MapView mMapView = null;
@@ -506,9 +506,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tv_main_userInfo://用户点击退出程序
                 BaseToast.makeText(MainActivity.this, "即将上线...", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.tv_main_changeUser://用户点击退出程序
-                Intent changeUserIntent=new Intent(MainActivity.this,RegisterActivity.class);
-                startActivity(changeUserIntent);
+            case R.id.tv_main_changeUser://用户成为遛狗师
+                Intent changeUserIntent = new Intent(MainActivity.this, RegisterActivity.class);
+                setResult(SystemConstant.MAIN_2_REGISTER, changeUserIntent);
                 MainActivity.this.finish();
                 break;
         }
