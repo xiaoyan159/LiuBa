@@ -14,9 +14,11 @@ public class SystemConstant {
     public static final int CURRENT_LOCATION = 0x101;//用来记录当前位置的键
     public static final int RETURN_FROM_MAIN = 0x102;
     public static final int LOGIN_2_MAIN = 0x103;
+    public static final int MAIN_2_REGISTER = 0x104;
 
     //配置URL
-    private static final String BASE_URL = "http://192.168.4.110:8199/liuba/";
+//    private static final String BASE_URL = "http://192.168.4.110:8199/liuba/";
+    private static final String BASE_URL = "http://124.89.91.119:8181/liuba/";
     public static final String queryByPhone = BASE_URL + "/userInfo/queryByPhone/";//根据电话查询用户信息
     public static final String userInfoCreate = BASE_URL + "/userInfo/create/";//创建用户
     public static final String trackCreate = BASE_URL + "/trackPoint/create/";//新建轨迹

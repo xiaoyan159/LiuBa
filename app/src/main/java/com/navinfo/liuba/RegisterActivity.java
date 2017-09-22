@@ -212,7 +212,7 @@ public class RegisterActivity extends BaseActivity {
         public void onCropImage(Uri imageUri) {
             super.onCropImage(imageUri);
 
-            Bitmap cropBitmap = getRoundBitmap(getBitmapFromUri(imageUri), 64);
+            Bitmap cropBitmap = drawCircleView02(getBitmapFromUri(imageUri));
             if (cropBitmap != null) {
                 saveBitmap(imageUri.getPath(), cropBitmap);
             }
@@ -307,57 +307,44 @@ public class RegisterActivity extends BaseActivity {
     }
 
     /**
-
-     * 获取裁剪后的圆形图片
-
-     * @param radius 半径
-
+     * @param bitmap src图片
+     * @return
      */
-    private Bitmap getRoundBitmap (Bitmap bitmap ,int radius) {
-        Bitmap squareBitmap;
-        int diameter = radius * 2;//直径
-        int x = 0, y = 0;
-        int bitmapWidth = bitmap.getWidth();
-        int bitmapHeight = bitmap.getHeight();
-        int squareWidth = 0, squareHeight = 0;
-        //以bitmap的短的边的标准，截取一个以bitmap的中心为中心的正方形
-        if (bitmapWidth > bitmapHeight) {
-            x = bitmapWidth / 2 - bitmapHeight / 2;
-            y = 0;
-            squareHeight = squareWidth = bitmapHeight;
-        } else {
-            y = bitmapHeight / 2 - bitmapWidth / 2;
-            x = 0;
-            squareHeight = squareWidth = bitmapWidth;
-        }
-        squareBitmap = Bitmap.createBitmap(bitmap, x, y, squareWidth, squareHeight);
-        //将squareBitmap缩放成diameter的大小
-        squareBitmap = Bitmap.createScaledBitmap(squareBitmap, diameter, diameter, false);
-        //新建一个bitmap resultbitmap，大小为squareBitmap的大小
-        Bitmap resultbitmap = Bitmap.createBitmap(squareBitmap.getWidth(),
-                squareBitmap.getHeight(),
-                Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(resultbitmap);
-        Paint paint = new Paint();
-        //新建一个矩形区域位置为0, 0, squareBitmap.getWidth(),squareBitmap.getHeight()
-        Rect rect = new Rect(0, 0, squareBitmap.getWidth(),squareBitmap.getHeight());
-        paint.setAntiAlias(true);//设置抗锯齿
-        paint.setFilterBitmap(true);//对位图进行滤波处理
-        paint.setDither(true);//设置防抖动
-        canvas.drawARGB(0, 0, 0, 0);//画背景颜色为透明
-        //以（squareBitmap.getWidth() / 2,squareBitmap.getHeight() / 2）为圆心，squareBitmap.getWidth() / 2为半径画圆
-        canvas.drawCircle(squareBitmap.getWidth() / 2,
-                squareBitmap.getHeight() / 2,
-                squareBitmap.getWidth() / 2,
-                paint);
-        //精髓，因为这句话，canvas原先画的透明背景圆和接下来的squareBitmap重叠部分显示出来
+    public static Bitmap getCircleBitmap(Bitmap bitmap) {
+        Bitmap output = Bitmap.createBitmap( bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas( output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect( 0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+        paint.setAntiAlias( true);
+        paint.setFilterBitmap( true);
+        paint.setDither( true);
+        canvas.drawARGB( 0, 0, 0, 0);
+        paint.setColor( color);
+        //在画布上绘制一个圆
+        canvas.drawCircle( bitmap.getWidth() / 2, bitmap.getHeight() / 2, bitmap.getWidth() / 2, paint);
+        paint.setXfermode( new PorterDuffXfermode( PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap( bitmap, rect, rect, paint);
+        return output;
+    }
+
+    public Bitmap drawCircleView02(Bitmap bitmap){
+
+        //前面同上，绘制图像分别需要bitmap，canvas，paint对象
+        bitmap = Bitmap.createScaledBitmap(bitmap, 128, 128, true);
+        Bitmap bm = Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bm);
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        //这里需要先画出一个圆
+        canvas.drawCircle(64, 64, 64, paint);
+        //圆画好之后将画笔重置一下
+        paint.reset();
+        //设置图像合成模式，该模式为只在源图像和目标图像相交的地方绘制源图像
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        //在画布中将squareBitmap画出来
-        canvas.drawBitmap(squareBitmap, rect, rect, paint);
-        bitmap = null ;
-        squareBitmap = null;
-        //将画布中的内容返回
-        return resultbitmap;
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return bm;
     }
 
     private Bitmap getBitmapFromUri(Uri uri) {
@@ -383,7 +370,7 @@ public class RegisterActivity extends BaseActivity {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+        mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
         try {
             fOut.flush();
         } catch (IOException e) {

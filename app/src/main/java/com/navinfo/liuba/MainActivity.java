@@ -538,9 +538,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tv_main_userInfo://用户点击退出程序
                 BaseToast.makeText(MainActivity.this, "即将上线...", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.tv_main_changeUser://用户点击退出程序
+            case R.id.tv_main_changeUser://用户成为遛狗师
                 Intent changeUserIntent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivity(changeUserIntent);
+                setResult(SystemConstant.MAIN_2_REGISTER, changeUserIntent);
                 MainActivity.this.finish();
                 break;
         }
