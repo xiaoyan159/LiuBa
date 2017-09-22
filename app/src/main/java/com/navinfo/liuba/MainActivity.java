@@ -56,6 +56,8 @@ import java.util.TimerTask;
 
 import cn.jpush.im.android.api.JMessageClient;
 
+import static com.baidu.location.h.k.I;
+
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mImgUserCenter;
@@ -252,7 +254,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             Toast.makeText(MainActivity.this, "定位失败！", Toast.LENGTH_LONG).show();
                         } else {
                             TrackEnity trackEnity = new TrackEnity();
-                            GeoPoint geopoint = new GeoPoint(currentLocation.getLatitude(), currentLocation.getLongitude());
+                            GeoPoint geopoint = new GeoPoint(currentLocation.getLongitude(), currentLocation.getLatitude());
                             trackEnity.setGeometry(GeometryTools.createGeometry(geopoint).toString());
                             trackEnity.setIsPee(ifPee);
                             trackEnity.setIsShit(ifShit);
@@ -482,6 +484,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mLinearGoEnd.setVisibility(View.GONE);
                 mCompeleteWalkTheDog.setVisibility(View.VISIBLE);
                 totalTime.setText(getChronometerSeconds(mTvTime) + "s");
+                totalMile.setText(mTvMile.getText().toString());
                 Message msgs = new Message();
                 msgs.what = 1;
                 mHandler.handleMessage(msgs);
