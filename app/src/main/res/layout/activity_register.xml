@@ -370,8 +370,8 @@
 
                     <ImageView
                         android:id="@+id/img_register_petImage"
-                        android:layout_width="128dp"
-                        android:layout_height="128dp"
+                        android:layout_width="135dp"
+                        android:layout_height="135dp"
                         android:layout_gravity="center" />
                 </FrameLayout>
             </RelativeLayout>
