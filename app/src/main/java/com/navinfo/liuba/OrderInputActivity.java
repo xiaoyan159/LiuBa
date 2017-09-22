@@ -1,11 +1,12 @@
 package com.navinfo.liuba;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,10 +35,10 @@ public class OrderInputActivity extends BaseActivity {
     @ViewInject(R.id.edt_order_input_time)
     private TextView edt_time;//遛狗时间
 
-    @ViewInject(R.id.spn_order_input_timeLong)
-    private Spinner spn_time_long;//遛狗时长
-    @ViewInject(R.id.spn_order_input_distance)
-    private Spinner spn_distance;//距离限制
+    @ViewInject(R.id.edt_order_input_timeLong)
+    private TextView spn_time_long;//遛狗时长
+    @ViewInject(R.id.edt_order_input_distance)
+    private TextView spn_distance;//距离限制
 
     private SimpleDateFormat sdf_date = new SimpleDateFormat("yyyy年MM月dd日");
     private SimpleDateFormat sdf_time = new SimpleDateFormat("HH:mm");
@@ -104,16 +105,43 @@ public class OrderInputActivity extends BaseActivity {
             }
         });
 
-        ArrayAdapter timeLongAdapter = new ArrayAdapter<String>(OrderInputActivity.this,
-                android.R.layout.simple_spinner_item, TIME_LONG_ARRAY);
-        timeLongAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);// 设置下拉风格
-        spn_time_long.setAdapter(timeLongAdapter);
-        ArrayAdapter distanceAdapter = new ArrayAdapter<String>(OrderInputActivity.this,
-                android.R.layout.simple_spinner_item, DISTANCE_ARRAY);
-        distanceAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);// 设置下拉风格
-        spn_distance.setAdapter(distanceAdapter);
+        spn_time_long.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayAdapter timeLongAdapter = new ArrayAdapter<String>(OrderInputActivity.this,
+                        android.R.layout.simple_list_item_1, TIME_LONG_ARRAY);
+                AlertDialog.Builder timeLongBuilder = new AlertDialog.Builder(OrderInputActivity.this);
+                timeLongBuilder.setTitle("选择时长");
+                timeLongBuilder.setAdapter(timeLongAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        spn_time_long.setText(TIME_LONG_ARRAY[i]);
+                    }
+                });
+                timeLongBuilder.show();
+            }
+        });
+        spn_time_long.setText(TIME_LONG_ARRAY[0]);
+
+        spn_distance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayAdapter distanceAdapter = new ArrayAdapter<String>(OrderInputActivity.this,
+                        android.R.layout.simple_list_item_1, DISTANCE_ARRAY);
+                AlertDialog.Builder distanceBuilder = new AlertDialog.Builder(OrderInputActivity.this);
+                distanceBuilder.setTitle("选择距离");
+                distanceBuilder.setAdapter(distanceAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        spn_distance.setText(DISTANCE_ARRAY[i]);
+                    }
+                });
+                distanceBuilder.show();
+            }
+        });
+        spn_distance.setText(DISTANCE_ARRAY[0]);
     }
 
     private CalendarDatePickerDialogFragment.OnDateSetListener dateSetListener = new CalendarDatePickerDialogFragment.OnDateSetListener() {
@@ -165,8 +193,8 @@ public class OrderInputActivity extends BaseActivity {
         if (orderInfo != null) {
             orderInfo.setAppointDate(edt_date.getText().toString());
             orderInfo.setAppointTime(edt_time.getText().toString());
-            orderInfo.setAppointDuration(Double.parseDouble(spn_time_long.getSelectedItem().toString().trim()));
-            orderInfo.setAppointScope(spn_distance.getSelectedItem().toString().trim());
+            orderInfo.setAppointDuration(Double.parseDouble(spn_time_long.getText().toString().trim()));
+            orderInfo.setAppointScope(spn_distance.getText().toString().trim());
         }
         return orderInfo;
     }

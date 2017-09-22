@@ -50,7 +50,8 @@ public class LiuBaApplication extends Application {
         //初始化百度地图组件
         SDKInitializer.initialize(getApplicationContext());
         //极光IM的初始化服务
-        JMessageClient.init(getApplicationContext(), false);
+        JMessageClient.setDebugMode(true);
+        JMessageClient.init(this);
         //初始化xUtils
         x.Ext.init(this);
         x.Ext.setDebug(BuildConfig.DEBUG); // 是否输出debug日志, 开启debug会影响性能.

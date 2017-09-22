@@ -1,7 +1,8 @@
 package com.navinfo.liuba;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,10 +32,12 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.DistanceUtil;
-import com.litesuits.common.io.FileUtils;
-import com.navinfo.liuba.enity.Point;
 import com.navinfo.liuba.enity.TrackEnity;
 import com.navinfo.liuba.entity.BaseResponse;
+import com.navinfo.liuba.entity.OrderFinishParam;
+import com.navinfo.liuba.entity.OrderResponseEntity;
+import com.navinfo.liuba.entity.OrderTrackEntity;
+import com.navinfo.liuba.entity.TrackPointParamEntity;
 import com.navinfo.liuba.location.GeoPoint;
 import com.navinfo.liuba.location.GeometryTools;
 import com.navinfo.liuba.util.BaseRequestParams;
@@ -44,18 +47,13 @@ import com.navinfo.liuba.util.SystemConstant;
 import com.navinfo.liuba.view.BaseToast;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.alibaba.fastjson.JSON.toJSONString;
+import cn.jpush.im.android.api.JMessageClient;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -85,18 +83,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean tagPee = false;
 
     private View layer_user_menu;//用户菜单的布局，点击左上角按钮显示
-    private TextView tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
+    private TextView tv_userChange,tv_userInfo, tv_orderInfo, tv_secret, tv_quite;
 
     //百度地图组件
     private MapView mMapView = null;
 
-    private long pauseString;//暂停时字符串
+    //    private long pauseString;//暂停时字符串
     private List<TrackEnity> trackList;
     private LiuBaApplication liuBaApplication;
     private Timer timer;
     OverlayOptions ooPolyline;
     List<LatLng> points;
 
+    private OrderResponseEntity currentOrderInfo = null;
+    private List<OrderTrackEntity> orderTrackEntityList = null;
+    private long mRecordTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,16 +117,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         btnAppoint.setOnClickListener(this);
 
         layer_user_menu = findViewById(R.id.layer_user_menu);
+        tv_userChange = (TextView) findViewById(R.id.tv_main_changeUser);
         tv_userInfo = (TextView) findViewById(R.id.tv_main_userInfo);
         tv_orderInfo = (TextView) findViewById(R.id.tv_main_orderInfo);
         tv_secret = (TextView) findViewById(R.id.tv_main_secret);
         tv_quite = (TextView) findViewById(R.id.tv_main_quite);
 
+
+        tv_userChange.setOnClickListener(this);
         layer_user_menu.setOnClickListener(this);
         tv_userInfo.setOnClickListener(this);
         tv_orderInfo.setOnClickListener(this);
         tv_secret.setOnClickListener(this);
         tv_quite.setOnClickListener(this);
+        tv_quite.setOnClickListener(this);
+
 
         mCompeleteWalkTheDog = (LinearLayout) findViewById(R.id.complete_walk_the_dog);
         mLinearWalkAppoint = (LinearLayout) findViewById(R.id.linear_activity_walk_appoint);//遛，约，布局
@@ -163,7 +169,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     .longitude(((LiuBaApplication) getApplication()).getCurrentLocation().getLongitude()).build();
             // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
             mMapView.getMap().setMyLocationData(locData);
-            BitmapDescriptor mCurrentMarker = BitmapDescriptorFactory.fromPath(SystemConstant.herderJpgPath);
+            //获取当前用户的头像信息
+            File currentUserMarkerFile = new File(SystemConstant.herderJpgDir + ((LiuBaApplication) getApplication()).getCurrentUser().getUserRealName() + ".jpg");
+            BitmapDescriptor mCurrentMarker = null;
+            if (currentUserMarkerFile.exists()) {
+                mCurrentMarker = BitmapDescriptorFactory.fromPath(currentUserMarkerFile.getAbsolutePath());
+            } else {
+                mCurrentMarker = BitmapDescriptorFactory.fromResource(R.mipmap.liuba_icon);
+            }
             MyLocationConfiguration config = new MyLocationConfiguration(MyLocationConfiguration.LocationMode.FOLLOWING, true, mCurrentMarker);
             mMapView.getMap().setMyLocationConfiguration(config);
             //设置地图显示比例尺
@@ -173,7 +186,57 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         trackList = new ArrayList<>();
         liuBaApplication = (LiuBaApplication) getApplication();
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        currentOrderInfo = (OrderResponseEntity) intent.getSerializableExtra(SystemConstant.BUNDLE_ORDER_INFO);
+        orderTrackEntityList = (List<OrderTrackEntity>) intent.getSerializableExtra(SystemConstant.BUNDLE_TRACK_LIST);
+        int action = intent.getIntExtra(SystemConstant.ORDER_ACTION, 0);
+        if (action == 1) {//开始遛狗，自动进入遛狗模式
+            mLinearWalkAppoint.setVisibility(View.GONE);
+            mLinearStart.setVisibility(View.VISIBLE);
+            mRecordTime = 0;
+            if (mRecordTime != 0) {
+                mTvTime.setBase(mTvTime.getBase() + (SystemClock.elapsedRealtime() - mRecordTime));
+            } else {
+                mTvTime.setBase(SystemClock.elapsedRealtime());
+            }
+            mTvTime.start();
+            mTvTime.start();
+            btnStart.setText("暂停");
+            Message msg = new Message();
+            msg.what = 0;
+            mHandler.handleMessage(msg);
+            imgShit.setVisibility(View.VISIBLE);
+            imgPee.setVisibility(View.VISIBLE);
+        } else if (action == 2) {//查看轨迹模式,自动进入轨迹详情界面
+            mLinearWalkAppoint.setVisibility(View.GONE);
+            mCompeleteWalkTheDog.setVisibility(View.VISIBLE);
+            totalTime.setText(currentOrderInfo.getAppointDuration() + "s");
+            mTvMile.setText(currentOrderInfo.getAppointScope() + "m");
+            Message msgs = new Message();
+            msgs.what = 1;
+            mHandler.handleMessage(msgs);
+            imgShit.setVisibility(View.GONE);
+            imgPee.setVisibility(View.GONE);
+            tagShit = currentOrderInfo.getIsShit() == 0 ? false : true;
+            tagPee = currentOrderInfo.getIsPee() == 0 ? false : true;
+            if (tagShit) {
+                isShit.setText("√");
+            } else {
+                isShit.setText("×");
+            }
+            tagShit = false;
+            if (tagPee) {
+                isPee.setText("√");
+            } else {
+                isPee.setText("×");
+            }
+            tagPee = false;
+            mRecordTime = 0;
+        }
     }
 
     private Handler mHandler = new Handler() {
@@ -198,12 +261,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             trackEnity.setGeometry(GeometryTools.createGeometry(geopoint).toString());
                             trackEnity.setIsPee(ifPee);
                             trackEnity.setIsShit(ifShit);
+                            if (currentOrderInfo != null) {
+                                trackEnity.setOrderId(currentOrderInfo.getOrderId());
+                            }
                             trackList.add(trackEnity);
                             ifShit = 0;
                             ifPee = 0;
                             //地图绘制图形
                             // 构造折线点坐标
-                            points.add(new LatLng(currentLocation.getLongitude(), currentLocation.getLatitude()));
+                            points.add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                             if (points != null && points.size() > 1) {
                                 int totalMiles = (int) Math.round(getTotalMiles(points));
                                 Message msg = new Message();
@@ -224,19 +290,68 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 timer.cancel();
             }
             if (msg.what == 3) {
-                if (trackList != null && trackList.size() > 0) {
-                    BaseRequestParams registerParams = new BaseRequestParams(SystemConstant.trackCreate);
-                    String json = JSON.toJSONString(trackList);
-                    registerParams.setParamerJson(json);
+                //如果是订单模式，则需要上传数据，否则直接移除轨迹线即可
+                if (currentOrderInfo != null) {
+                    if (trackList != null && trackList.size() > 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("成功");
+                        builder.setMessage("上传成功，通知宠物主人任务完成咯!");
+                        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                                BaseRequestParams trackParams = new BaseRequestParams(SystemConstant.trackCreate);
+                                TrackPointParamEntity trackPointParamEntity = new TrackPointParamEntity();
+                                trackPointParamEntity.setData(trackList);
+                                String json = JSON.toJSONString(trackPointParamEntity);
+                                trackParams.setParamerJson(json);
 
-                    DefaultHttpUtil.postMethod(MainActivity.this, registerParams, new DefaultHttpUtil.HttpCallback() {
+                                DefaultHttpUtil.postMethod(MainActivity.this, trackParams, new DefaultHttpUtil.HttpCallback() {
+                                    @Override
+                                    public void onSuccess(String result) {
+                                        if (result != null) {
+                                            BaseResponse<String> response = JSON.parseObject(result, new TypeReference<BaseResponse<String>>() {
+                                            }.getType());
+                                            if (response.getErrcode() >= 0) {//提交轨迹点成功
+
+                                            } else {
+                                                BaseToast.makeText(MainActivity.this, response.getErrmsg(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFinished() {
+                                        super.onFinished();
+                                        //更新当前订单状态为已完成
+                                        updateOrderFinish();
+                                        clearMapTrack();
+                                    }
+                                });
+                            }
+                        });
+                        builder.setNeutralButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        builder.show();
+                    } else {
+                        Toast.makeText(MainActivity.this, "无轨迹数据", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                    builder.setTitle("完成");
+                    builder.setMessage("完成，自动清除地图上的轨迹哦!");
+                    builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onSuccess(String result) {
-                            Toast.makeText(MainActivity.this, "轨迹提交成功", Toast.LENGTH_LONG).show();
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            clearMapTrack();
+                            dialogInterface.dismiss();
                         }
                     });
-                } else {
-                    Toast.makeText(MainActivity.this, "无轨迹数据", Toast.LENGTH_LONG).show();
+                    builder.show();
                 }
             }
         }
@@ -248,7 +363,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     public void drawTrackLine(List<LatLng> pointsList) {
         mMapView.getMap().clear();
-        OverlayOptions ooPolyline = new PolylineOptions().width(10).points(pointsList).color(Integer.valueOf(Color.RED));
+        OverlayOptions ooPolyline = new PolylineOptions().width(10).points(pointsList).color(getResources().getColor(R.color.colortrackline));
         //添加在地图中
         mMapView.getMap().addOverlay(ooPolyline);
     }
@@ -292,23 +407,25 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
 
-            case R.id.tv_main_secret:
-                Intent secretIntent = new Intent(MainActivity.this, MyScretActivity.class);
-                startActivity(secretIntent);
-                break;
-
             case R.id.btn_start:
                 if (btnStart.getText().toString().equals("开始")) {
+                    if (mRecordTime != 0) {
+                        mTvTime.setBase(mTvTime.getBase() + (SystemClock.elapsedRealtime() - mRecordTime));
+                    } else {
+                        mTvTime.setBase(SystemClock.elapsedRealtime());
+                    }
                     mTvTime.start();
-                    btnStart.setText("结束");
+                    mTvTime.start();
+                    btnStart.setText("暂停");
                     Message msg = new Message();
                     msg.what = 0;
                     mHandler.handleMessage(msg);
                     imgShit.setVisibility(View.VISIBLE);
                     imgPee.setVisibility(View.VISIBLE);
                 } else {
-                    pauseString = convertStrTimeToLong(mTvTime.getText().toString());
                     mTvTime.stop();
+                    mRecordTime = SystemClock.elapsedRealtime();
+//                    pauseString = convertStrTimeToLong(mTvTime.getText().toString());
                     mLinearStart.setVisibility(View.GONE);
                     mLinearGoEnd.setVisibility(View.VISIBLE);
                     Message msg = new Message();
@@ -323,7 +440,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.linear_go_on://继续
                 mLinearGoEnd.setVisibility(View.GONE);
                 mLinearStart.setVisibility(View.VISIBLE);
-                mTvTime.setBase(pauseString);//设置成暂停时时间
+                mTvTime.setBase(mTvTime.getBase() + (SystemClock.elapsedRealtime() - mRecordTime));//设置成暂停时时间
                 mTvTime.start();
                 Message msg = new Message();
                 msg.what = 0;
@@ -353,6 +470,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     isPee.setText("×");
                 }
                 tagPee = false;
+                mRecordTime = 0;
                 break;
             case R.id.img_shit_location:
                 ifShit = 1;
@@ -370,6 +488,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Message upLoadTrack = new Message();
                 upLoadTrack.what = 3;
                 mHandler.handleMessage(upLoadTrack);
+                break;
+            case R.id.tv_main_secret:
+                layer_user_menu.setVisibility(View.GONE);//隐藏菜单按钮
+                Intent secretIntent = new Intent(MainActivity.this, MyScretActivity.class);
+                startActivity(secretIntent);
+                break;
+            case R.id.tv_main_orderInfo://用户点击我的订单
+                layer_user_menu.setVisibility(View.GONE);//隐藏菜单按钮
+                Intent orderListIntent = new Intent(MainActivity.this, MyOrderListActivity.class);
+                startActivity(orderListIntent);
+                break;
+            case R.id.tv_main_quite://用户点击退出程序
+                MainActivity.this.finish();
+                setResult(0, null);
+                break;
+            case R.id.tv_main_userInfo://用户点击退出程序
+                BaseToast.makeText(MainActivity.this, "即将上线...", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_main_changeUser://用户点击退出程序
+                Intent changeUserIntent=new Intent(MainActivity.this,RegisterActivity.class);
+                startActivity(changeUserIntent);
+                MainActivity.this.finish();
                 break;
         }
 
@@ -435,6 +575,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mMapView.onDestroy();
+
+        //注销极光IM
+        JMessageClient.logout();
+
+        setResult(SystemConstant.RETURN_FROM_MAIN, null);
     }
 
     @Override
@@ -451,6 +596,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mMapView.onPause();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        currentOrderInfo = null;
+        orderTrackEntityList = null;
+    }
+
     public String createTrackJson(List<HashMap<String, Object>> list) {
         JSONObject object = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -463,5 +615,38 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
         object.put("data", jsonArray);
         return object.toString();
+    }
+
+    private void updateOrderFinish() {
+        OrderFinishParam orderFinishParam = new OrderFinishParam();
+        orderFinishParam.setIsPee(isPee.getText().toString().equals("×") ? 0 : 1);
+        orderFinishParam.setIsShit(isShit.getText().toString().equals("×") ? 0 : 1);
+        orderFinishParam.setLength(Integer.parseInt(mTvMile.getText().toString().replace("m", "").toString()));
+        orderFinishParam.setOrderCost(currentOrderInfo.getOrderCost());
+        orderFinishParam.setOrderId(currentOrderInfo.getOrderId());
+        BaseRequestParams updateOrderFinishParams = new BaseRequestParams(SystemConstant.finishOrder);
+        updateOrderFinishParams.setParamerJson(JSON.toJSONString(orderFinishParam));
+        DefaultHttpUtil.postMethod(MainActivity.this, updateOrderFinishParams, new DefaultHttpUtil.HttpCallback() {
+            @Override
+            public void onSuccess(String result) {
+                //服务器返回数据成功，记录用户id
+                if (result != null) {
+                    BaseResponse<String> reponse = JSON.parseObject(result, new TypeReference<BaseResponse<String>>() {
+                    }.getType());
+                    if (reponse.getErrcode() >= 0) {
+                        BaseToast.makeText(MainActivity.this, "本次订单完成，已通知宠物主人(*￣︶￣)", Toast.LENGTH_SHORT).show();
+                    } else {
+                        BaseToast.makeText(MainActivity.this, reponse.getErrmsg(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * 清除地图上的轨迹
+     */
+    private void clearMapTrack() {
+        mMapView.getMap().clear();
     }
 }

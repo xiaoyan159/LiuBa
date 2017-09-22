@@ -6,4 +6,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorFontPrimary">@android:color/white</color>
     <color name="colorFontPrimaryDark">#66D973</color>
+    <color name="colortrackline">#3881FD</color>
 </resources>

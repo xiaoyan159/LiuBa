@@ -285,27 +285,30 @@
 
         <ImageView
             android:id="@+id/img_shit_location"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/item_padding_horzontal"
             android:layout_marginTop="300dp"
             android:clickable="true"
-            android:src="@mipmap/icon_shit"
-            android:visibility="gone"
             android:contextClickable="true"
-            />
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_shit"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/img_pee_location"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginTop="350dp"
+            android:layout_marginLeft="@dimen/item_padding_horzontal"
+            android:layout_marginTop="370dp"
             android:clickable="true"
-            android:src="@mipmap/icon_pee"
-            android:visibility="gone"
             android:contextClickable="true"
-            />
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_pee"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/user_center"
             android:layout_width="wrap_content"
@@ -326,9 +329,19 @@
             android:visibility="gone">
 
             <TextView
+                android:id="@+id/tv_main_changeUser"
+                style="@style/bottomLayerStyle"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:padding="@dimen/fab_margin"
+                android:text="成为遛狗师"
+                android:textColor="@android:color/white" />
+
+            <TextView
                 android:id="@+id/tv_main_userInfo"
                 style="@style/bottomLayerStyle"
-                android:layout_width="100dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:padding="@dimen/fab_margin"
@@ -338,7 +351,7 @@
             <TextView
                 android:id="@+id/tv_main_orderInfo"
                 style="@style/bottomLayerStyle"
-                android:layout_width="100dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:padding="@dimen/fab_margin"
@@ -348,7 +361,7 @@
             <TextView
                 android:id="@+id/tv_main_secret"
                 style="@style/bottomLayerStyle"
-                android:layout_width="100dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:padding="@dimen/fab_margin"
@@ -358,7 +371,7 @@
             <TextView
                 android:id="@+id/tv_main_quite"
                 style="@style/bottomLayerStyle"
-                android:layout_width="100dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:padding="@dimen/fab_margin"

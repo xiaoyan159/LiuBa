@@ -16,6 +16,12 @@ public class BaseRequestParams extends RequestParams {
     }
 
     public void setParamerJson(String paramerJson) {
+//        if (!paramerJson.startsWith("{")) {
+//            paramerJson = "{" + paramerJson;
+//        }
+//        if (!paramerJson.startsWith("}")) {
+//            paramerJson = paramerJson + "}";
+//        }
         this.addQueryStringParameter("parameter", paramerJson);
     }
 
