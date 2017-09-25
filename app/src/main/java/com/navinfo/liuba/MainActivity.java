@@ -56,8 +56,6 @@ import java.util.TimerTask;
 
 import cn.jpush.im.android.api.JMessageClient;
 
-import static com.baidu.location.h.k.I;
-
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private ImageView mImgUserCenter;
@@ -253,6 +251,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         if (currentLocation.getLongitude() == currentLocation.getLatitude() && currentLocation.getLatitude() == 4.9e-324) {
                             Toast.makeText(MainActivity.this, "定位失败！", Toast.LENGTH_LONG).show();
                         } else {
+                            //取出
+
                             TrackEnity trackEnity = new TrackEnity();
                             GeoPoint geopoint = new GeoPoint(currentLocation.getLongitude(), currentLocation.getLatitude());
                             trackEnity.setGeometry(GeometryTools.createGeometry(geopoint).toString());
@@ -270,6 +270,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             if (trackList != null && trackList.size() > 1) {
                                 drawTrackLine(trackList);
                             }
+
+                            // 根据当前用户的位置信息重新设置用户位置，实时更新用户的位置图标
+                            MyLocationData locData = new MyLocationData.Builder().latitude(currentLocation.getLatitude())
+                                    .longitude(currentLocation.getLongitude()).build();
+                            // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+                            mMapView.getMap().setMyLocationData(locData);
                         }
                     }
                 }, 1000, 1000);//1秒之后，每隔2秒做一次run()操作
