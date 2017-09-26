@@ -194,7 +194,7 @@ public class LoginActivity extends BaseActivity {
             }
         } else if (requestCode == SystemConstant.LOGIN_2_MAIN) {
             if (data != null) {
-                intentToRegister();
+                intentToChangeUserType();
             } else {
                 LoginActivity.this.finish();
             }
@@ -203,6 +203,10 @@ public class LoginActivity extends BaseActivity {
 
     private void intentToRegister() {
         Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivityForResult(registerIntent, 0x104);
+    }
+    private void intentToChangeUserType() {
+        Intent registerIntent = new Intent(LoginActivity.this, ChangeUserTypeActivity.class);
         startActivityForResult(registerIntent, 0x101);
     }
 }

@@ -49,12 +49,15 @@ import com.navinfo.liuba.view.BaseToast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.jpush.im.android.api.JMessageClient;
+
+import static com.baidu.mapapi.utils.DistanceUtil.getDistance;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
@@ -78,6 +81,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private RadioButton isPee;
     private ImageView imgShit;
     private ImageView imgPee;
+    private ImageView imgPhoto;
+    private View layer_left;
     private int ifShit = 0;
     private int ifPee = 0;
     private boolean tagShit = false;
@@ -96,6 +101,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private OrderResponseEntity currentOrderInfo = null;
     private List<OrderTrackEntity> orderTrackEntityList = null;
     private long mRecordTime = 0;
+    private List<LatLng> trackPointsList;//用于记录轨迹的数据集
+    private long lastDate = -1;//用于记录用户最后一次轨迹的记录时间，单位是毫秒，用作纠偏，用户点击结束后自动归0
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,6 +151,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         isPee = (RadioButton) findViewById(R.id.is_pee);
         imgShit = (ImageView) findViewById(R.id.img_shit_location);
         imgPee = (ImageView) findViewById(R.id.img_pee_location);
+        imgPhoto = (ImageView) findViewById(R.id.img_photo_location);
+        layer_left = findViewById(R.id.layer_main_left);
 
         mCompeleteWalkTheDog.setOnClickListener(this);
         btnStart.setOnClickListener(this);
@@ -151,6 +160,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mLinearEnd.setOnClickListener(this);
         imgShit.setOnClickListener(this);
         imgPee.setOnClickListener(this);
+        imgPhoto.setOnClickListener(this);
         mLinearComplete.setOnClickListener(this);
 
         mMapView = (MapView) findViewById(R.id.bmapView);
@@ -204,8 +214,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             Message msg = new Message();
             msg.what = 0;
             mHandler.handleMessage(msg);
-            imgShit.setVisibility(View.VISIBLE);
-            imgPee.setVisibility(View.VISIBLE);
+//            imgShit.setVisibility(View.VISIBLE);
+//            imgPee.setVisibility(View.VISIBLE);
+            layer_left.setVisibility(View.VISIBLE);
         } else if (action == 2) {//查看轨迹模式,自动进入轨迹详情界面
             mLinearWalkAppoint.setVisibility(View.GONE);
             mCompeleteWalkTheDog.setVisibility(View.VISIBLE);
@@ -214,8 +225,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             Message msgs = new Message();
             msgs.what = 1;
             mHandler.handleMessage(msgs);
-            imgShit.setVisibility(View.GONE);
-            imgPee.setVisibility(View.GONE);
+//            imgShit.setVisibility(View.GONE);
+//            imgPee.setVisibility(View.GONE);
+            layer_left.setVisibility(View.GONE);
             tagShit = currentOrderInfo.getIsShit() == 0 ? false : true;
             tagPee = currentOrderInfo.getIsPee() == 0 ? false : true;
             if (tagShit) {
@@ -234,6 +246,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         }
     }
 
+//    private double x = 0.001;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -248,10 +261,28 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     public void run() {
                         // TODO Auto-generated method stub
                         BDLocation currentLocation = liuBaApplication.getCurrentLocation();
+//                        currentLocation.setLatitude(currentLocation.getLatitude() + x);
+//                        x = x + x;
                         if (currentLocation.getLongitude() == currentLocation.getLatitude() && currentLocation.getLatitude() == 4.9e-324) {
                             Toast.makeText(MainActivity.this, "定位失败！", Toast.LENGTH_LONG).show();
                         } else {
-                            //取出
+                            // 根据当前用户的位置信息重新设置用户位置，实时更新用户的位置图标
+                            MyLocationData locData = new MyLocationData.Builder().latitude(currentLocation.getLatitude())
+                                    .longitude(currentLocation.getLongitude()).build();
+                            // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
+                            mMapView.getMap().setMyLocationData(locData);
+                            //添加纠偏
+                            if (trackPointsList != null && trackPointsList.size() >= 1) {
+                                LatLng lastLatLng = trackPointsList.get(trackPointsList.size() - 1);
+                                LatLng currentLatLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                                double distance = DistanceUtil.getDistance(lastLatLng, currentLatLng);
+                                long currentDate = new Date().getTime();
+                                double speed = (distance*1000) / ((currentDate - lastDate) );
+                                if (speed > 10 && lastDate > 0) {//速度大于10米/秒，提示用户，并取消此次采点
+                                    BaseToast.makeText(MainActivity.this, "你的速度不合常理哦，已经自动屏蔽当前点位轨迹的采集", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            }
 
                             TrackEnity trackEnity = new TrackEnity();
                             GeoPoint geopoint = new GeoPoint(currentLocation.getLongitude(), currentLocation.getLatitude());
@@ -262,6 +293,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                 trackEnity.setOrderId(currentOrderInfo.getOrderId());
                             }
                             trackList.add(trackEnity);
+                            lastDate = new Date().getTime();
                             //重置状态
                             ifShit = 0;
                             ifPee = 0;
@@ -270,12 +302,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                             if (trackList != null && trackList.size() > 1) {
                                 drawTrackLine(trackList);
                             }
-
-                            // 根据当前用户的位置信息重新设置用户位置，实时更新用户的位置图标
-                            MyLocationData locData = new MyLocationData.Builder().latitude(currentLocation.getLatitude())
-                                    .longitude(currentLocation.getLongitude()).build();
-                            // 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
-                            mMapView.getMap().setMyLocationData(locData);
                         }
                     }
                 }, 1000, 1000);//1秒之后，每隔2秒做一次run()操作
@@ -311,7 +337,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                             BaseResponse<String> response = JSON.parseObject(result, new TypeReference<BaseResponse<String>>() {
                                             }.getType());
                                             if (response.getErrcode() >= 0) {//提交轨迹点成功
-
+                                                clearMapTrack();
                                             } else {
                                                 BaseToast.makeText(MainActivity.this, response.getErrmsg(), Toast.LENGTH_SHORT).show();
                                             }
@@ -361,11 +387,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     public void drawTrackLine(List<TrackEnity> enityList) {
         mMapView.getMap().clear();
-        List<LatLng> pointsList = new ArrayList<>();
+        if (trackPointsList == null) {
+            trackPointsList = new ArrayList<>();
+        }
+        trackPointsList.clear();
         for (int i = 0; i < enityList.size(); i++) {
             TrackEnity enity = enityList.get(i);
             GeoPoint geoPoint = GeometryTools.createGeoPoint(enity.getGeometry());
-            pointsList.add(new LatLng(geoPoint.getLat(), geoPoint.getLon()));
+            trackPointsList.add(new LatLng(geoPoint.getLat(), geoPoint.getLon()));
             if (enity.getIsPee() == 1) {
                 //定义Maker坐标点
                 LatLng point = new LatLng(geoPoint.getLat(), geoPoint.getLon());
@@ -393,11 +422,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 mMapView.getMap().addOverlay(option);
             }
         }
-        OverlayOptions ooPolyline = new PolylineOptions().width(10).points(pointsList).color(getResources().getColor(R.color.colortrackline));
+        OverlayOptions ooPolyline = new PolylineOptions().width(10).points(trackPointsList).color(getResources().getColor(R.color.colortrackline));
         //添加在地图中
         mMapView.getMap().addOverlay(ooPolyline);
         //更新里程数
-        int totalMiles = (int) Math.round(getTotalMiles(pointsList));
+        int totalMiles = (int) Math.round(getTotalMiles(trackPointsList));
         Message msg = new Message();
         msg.what = 4;
         msg.obj = totalMiles;
@@ -414,7 +443,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public double getTotalMiles(List<LatLng> pointsList) {
         double totalDiatance = 0;
         for (int i = 1; i < pointsList.size(); i++) {
-            double distance = DistanceUtil.getDistance(pointsList.get(i - 1), pointsList.get(i));
+            double distance = getDistance(pointsList.get(i - 1), pointsList.get(i));
             totalDiatance = totalDiatance + distance;
         }
         return totalDiatance;
@@ -457,8 +486,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Message msg = new Message();
                     msg.what = 0;
                     mHandler.handleMessage(msg);
-                    imgShit.setVisibility(View.VISIBLE);
-                    imgPee.setVisibility(View.VISIBLE);
+//                    imgShit.setVisibility(View.VISIBLE);
+//                    imgPee.setVisibility(View.VISIBLE);
+                    layer_left.setVisibility(View.VISIBLE);
                 } else {
                     mTvTime.stop();
                     mRecordTime = SystemClock.elapsedRealtime();
@@ -468,8 +498,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                     Message msg = new Message();
                     msg.what = 1;
                     mHandler.handleMessage(msg);
-                    imgShit.setVisibility(View.GONE);
-                    imgPee.setVisibility(View.GONE);
+//                    imgShit.setVisibility(View.GONE);
+//                    imgPee.setVisibility(View.GONE);
+                    layer_left.setVisibility(View.GONE);
                 }
 
                 break;
@@ -482,8 +513,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Message msg = new Message();
                 msg.what = 0;
                 mHandler.handleMessage(msg);
-                imgShit.setVisibility(View.VISIBLE);
-                imgPee.setVisibility(View.VISIBLE);
+//                imgShit.setVisibility(View.VISIBLE);
+//                imgPee.setVisibility(View.VISIBLE);
+                layer_left.setVisibility(View.VISIBLE);
                 break;
 
             case R.id.linear_end://结束
@@ -494,8 +526,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 Message msgs = new Message();
                 msgs.what = 1;
                 mHandler.handleMessage(msgs);
-                imgShit.setVisibility(View.GONE);
-                imgPee.setVisibility(View.GONE);
+//                imgShit.setVisibility(View.GONE);
+//                imgPee.setVisibility(View.GONE);
+                layer_left.setVisibility(View.GONE);
                 if (tagShit) {
                     isShit.setText("√");
                 } else {
@@ -517,6 +550,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.img_pee_location:
                 ifPee = 1;
                 tagPee = true;
+                break;
+            case R.id.img_photo_location:
+                BaseToast.makeText(MainActivity.this, "即将上线", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.linear_complete:
                 mLinearWalkAppoint.setVisibility(View.VISIBLE);
@@ -686,5 +722,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     private void clearMapTrack() {
         mMapView.getMap().clear();
+        trackPointsList.clear();
+        trackList.clear();
+        lastDate = -1;
     }
 }

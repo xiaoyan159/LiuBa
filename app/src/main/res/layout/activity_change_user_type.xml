@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <include
+        android:id="@+id/layer_order_confirm_title"
+        layout="@layout/layer_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"></include>
+
+    <LinearLayout
+        android:id="@+id/layer_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:gravity="center"
+            android:text="@string/fee_tips"
+            android:textColor="@color/colorFontPrimaryDark" />
+
+        <RelativeLayout
+            android:id="@+id/layerchange_userType_confirm"
+            style="@style/bottomLayerStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/bottomTextBgStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/title_confirm" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/layer_bottom"
+        android:layout_below="@id/layer_order_confirm_title"
+        android:padding="@dimen/fab_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/subTitleStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="用户信息" />
+
+                <LinearLayout
+                    style="@style/itemLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/itemTvStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="姓名" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <EditText
+                        style="@style/itemEditTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/hint_user_name" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/itemLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/itemTvStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="手机" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <EditText
+                        style="@style/itemEditTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/hint_user_phone" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/itemLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/itemTvStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="地址" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <EditText
+                        style="@style/itemEditTextStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:hint="@string/hint_user_address" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/itemLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/itemTvStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="身份证    " />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <EditText
+                        style="@style/itemEditTextStyle"
+                        android:layout_width="68dp"
+                        android:layout_height="96dp"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:text="正面"
+                        android:textColor="@color/colorFontPrimaryDark" />
+
+                    <EditText
+                        style="@style/itemEditTextStyle"
+                        android:layout_width="68dp"
+                        android:layout_height="96dp"
+                        android:layout_marginLeft="@dimen/fab_margin"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:text="反面"
+                        android:textColor="@color/colorFontPrimaryDark" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/itemLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/itemTvStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="银行卡    " />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <EditText
+                        style="@style/itemEditTextStyle"
+                        android:layout_width="68dp"
+                        android:layout_height="96dp"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:text="正面"
+                        android:textColor="@color/colorFontPrimaryDark" />
+                </LinearLayout>
+
+                <LinearLayout
+                    style="@style/itemLayerStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/itemTvStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="资产证明" />
+
+                    <Space style="@style/itemSpaceStyle" />
+
+                    <EditText
+                        style="@style/itemEditTextStyle"
+                        android:layout_width="68dp"
+                        android:layout_height="96dp"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:text="正面"
+                        android:textColor="@color/colorFontPrimaryDark" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

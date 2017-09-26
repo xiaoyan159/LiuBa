@@ -283,31 +283,50 @@
             android:layout_above="@id/layer_main_bottom"
             android:clickable="true" />
 
-        <ImageView
-            android:id="@+id/img_shit_location"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+        <LinearLayout
+            android:id="@+id/layer_main_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/item_padding_horzontal"
-            android:layout_marginTop="300dp"
-            android:clickable="true"
-            android:contextClickable="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/icon_shit"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/img_shit_location"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/item_padding_horzontal"
+                android:layout_marginTop="@dimen/item_padding_horzontal"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_shit" />
 
-        <ImageView
-            android:id="@+id/img_pee_location"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/item_padding_horzontal"
-            android:layout_marginTop="370dp"
-            android:clickable="true"
-            android:contextClickable="true"
-            android:scaleType="fitXY"
-            android:src="@mipmap/icon_pee"
-            android:visibility="gone" />
+            <ImageView
+                android:id="@+id/img_pee_location"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/item_padding_horzontal"
+                android:layout_marginTop="@dimen/item_padding_horzontal"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/icon_pee" />
+
+            <ImageView
+                android:id="@+id/img_photo_location"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/item_padding_horzontal"
+                android:layout_marginTop="@dimen/item_padding_horzontal"
+                android:clickable="true"
+                android:contextClickable="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/photo_left" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/user_center"
