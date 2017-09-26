@@ -144,28 +144,46 @@
                         style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="身份证    " />
 
                     <Space style="@style/itemSpaceStyle" />
-
-                    <EditText
+                    <FrameLayout
                         style="@style/itemEditTextStyle"
                         android:layout_width="68dp"
-                        android:layout_height="96dp"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:text="正面"
-                        android:textColor="@color/colorFontPrimaryDark" />
+                        android:layout_height="96dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:text="正面"
+                            android:textColor="@color/colorFontPrimaryDark" />
+                        <ImageView
+                            android:id="@+id/img_change_user_sZheng"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </FrameLayout>
 
-                    <EditText
+                    <FrameLayout
                         style="@style/itemEditTextStyle"
                         android:layout_width="68dp"
-                        android:layout_height="96dp"
                         android:layout_marginLeft="@dimen/fab_margin"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:text="反面"
-                        android:textColor="@color/colorFontPrimaryDark" />
+                        android:layout_height="96dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:text="反面"
+                            android:textColor="@color/colorFontPrimaryDark" />
+                        <ImageView
+                            android:id="@+id/img_change_user_sFan"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </FrameLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -178,18 +196,28 @@
                         style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="银行卡    " />
 
                     <Space style="@style/itemSpaceStyle" />
 
-                    <EditText
+                    <FrameLayout
                         style="@style/itemEditTextStyle"
                         android:layout_width="68dp"
-                        android:layout_height="96dp"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:text="正面"
-                        android:textColor="@color/colorFontPrimaryDark" />
+                        android:layout_height="96dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:text="正面"
+                            android:textColor="@color/colorFontPrimaryDark" />
+                        <ImageView
+                            android:id="@+id/img_change_user_yZheng"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </FrameLayout>
                 </LinearLayout>
 
                 <LinearLayout
@@ -202,18 +230,28 @@
                         style="@style/itemTvStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="资产证明" />
 
                     <Space style="@style/itemSpaceStyle" />
 
-                    <EditText
+                    <FrameLayout
                         style="@style/itemEditTextStyle"
                         android:layout_width="68dp"
-                        android:layout_height="96dp"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:text="正面"
-                        android:textColor="@color/colorFontPrimaryDark" />
+                        android:layout_height="96dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:enabled="false"
+                            android:gravity="center"
+                            android:text="正面"
+                            android:textColor="@color/colorFontPrimaryDark" />
+                        <ImageView
+                            android:id="@+id/img_change_user_zZheng"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+                    </FrameLayout>
                 </LinearLayout>
 
             </LinearLayout>
